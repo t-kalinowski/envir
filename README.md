@@ -5,9 +5,7 @@
 <!-- badges: end -->
 
 envir is a small R package with a handful of functions designed for
-managing R environments. R has excellent support for managing environments
-already, but some of the defaults encourage usage patterns that don't scale well
-to larger code bases.
+managing R environments. 
 
 The main exported functions are:
 
@@ -36,20 +34,25 @@ See `?import_from` for extended usage examples.
 
 ## Installation
 
-You can install the released version of envir from [CRAN](https://CRAN.R-project.org) with:
+<!-- You can install the released version of envir from [CRAN](https://CRAN.R-project.org) with: -->
+
+<!-- ``` r -->
+<!-- install.packages("envir") -->
+<!-- ``` -->
+
+<!-- Or install the development version with -->
 
 ``` r
-install.packages("envir")
-```
-
-Or install the development version with
-``` r
-if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+if (!requireNamespace("remotes", quietly = TRUE)) 
+  install.packages("remotes")
 remotes::install_github("t-kalinowski/envir")
 ```
 
 
 ## Related work
+
+R has excellent support for managing environments already, but some of the
+defaults encourage usage patterns that don't scale well to larger code bases.
 
 Other solutions developed for managing R environments:
 

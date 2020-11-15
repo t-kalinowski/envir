@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Source R files into an attached environment — attach_source • envir</title>
+<title>Source R files in an attached environment — attach_source • envir</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Source R files into an attached environment — attach_source" />
-<meta property="og:description" content="Source R files into an attached environment" />
+<meta property="og:title" content="Source R files in an attached environment — attach_source" />
+<meta property="og:description" content="Source R files in an attached environment" />
 
 
 
@@ -97,13 +97,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Source R files into an attached environment</h1>
+    <h1>Source R files in an attached environment</h1>
     
     <div class="hidden name"><code>attach_source.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Source R files into an attached environment</p>
+    <p>Source R files in an attached environment</p>
     </div>
 
     <pre class="usage"><span class='fu'>attach_source</span><span class='op'>(</span>
@@ -163,21 +163,34 @@ the search path without signaling a warning if <code>warn.conflicts</code> is <c
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>One subtlety that is sometimes important: the global environment or any
-packages attached after this is called will not on the search path for the
-environment where the source is evaluated. The search path of the
-environment the R files are sourced in is <code>search()[-(1:(pos-1))]</code>. So
-for, example, functions defined in the sources will not see functions from
-subsequent <code>library</code> calls. This is by design. However, if you want the R
-functions defined in the sources to have the global environment (and all
-other attached environments) on their search path, then you can do
-something like:</p>
-<p><code><a href='attach_eval.html'>attach_eval({ import_from(c(filepaths), "**") })</a></code></p>
-<p>Instead of sourcing files directly in the attached environment, this snippet
-sources the files into a new environment that inherits from <code>.Globalenv</code>,
-and then copies over everything to the attached environment.</p>
+packages attached after this environment is created will be not on the search
+path for the environment where the source is evaluated. The search path of
+the environment the R files are sourced in is <code>search()[-(1:(pos-1))]</code>.</p>
+<p>This means that, for example, if you source a script that calls <code>library</code>,
+the code in that script will not "see" the functions from the attached
+packages. This is by design. However, if you want to source scripts that
+call <code>library</code> and define new functions, and you want those new functions
+to "see" the <code>library</code> attached packages, here are 3 ways to do that:</p><ol>
+<li><p>Attach all the packages you want before attaching the script</p></li>
+</ol><p><div class="r"></p><pre><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>foo</span><span class='op'>)</span>; <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>bar</span><span class='op'>)</span>
+<span class='fu'>attach_source</span><span class='op'>(</span><span class='st'>"my_script.R"</span><span class='op'>)</span>
+</pre><p></div></p><ol>
+<li><p>Modify the default <code>pos</code> argument to <code>library</code>, so all new packages
+attach after your script:</p></li>
+</ol><p><div class="r"></p><pre><span class='fu'>envir</span><span class='fu'>:::</span><span class='fu'>set_default_library_pos</span><span class='op'>(</span>after <span class='op'>=</span> <span class='st'>"source:my_script.R"</span><span class='op'>)</span>
+<span class='fu'>attach_source</span><span class='op'>(</span><span class='st'>"my_script.R"</span><span class='op'>)</span>
+</pre><p></div></p><ol>
+<li><p>This is the likely the most preferred solution. Instead of sourcing
+files directly in the attached environment, source the files into a new
+environment that inherits from <code>.Globalenv</code>, and then copy over everything
+to the attached environment.</p></li>
+</ol><p><div class="r"></p><pre><span class='fu'><a href='attach_eval.html'>attach_eval</a></span><span class='op'>(</span><span class='op'>{</span>
+  <span class='fu'><a href='import_from.html'>import_from</a></span><span class='op'>(</span><span class='st'>"my_script.R"</span><span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
+</pre><p></div></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>import_from, set_library_default_pos</p></div>
+    <div class='dont-index'><p><a href='import_from.html'>import_from</a>, <a href='set_library_default_pos.html'>set_library_default_pos</a></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

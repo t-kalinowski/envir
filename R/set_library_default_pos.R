@@ -1,23 +1,23 @@
 #' Modify default attach position for `base::library()`
 #'
+#' This function is documented but not exported. Reach in with
+#' `envir:::set_library_default_pos()` to use it.
+#'
 #' @details This is primarily a way to "pin" a particular environment on the
 #'   search path. For example, say you have a "project_utils" environment where
 #'   you've defined a variety of useful functions. To prevent future `library()`
 #'   calls from masking any objects in your attached "project_utils"
 #'   environment, you can modify the default `pos` argument to library.
 #'
-#'   ````r
-#'   attach_source("project_utils.R", name = "project_utils)
-#'   set_library_default_pos(after = "project_utils")
-#'   library(foo) # now foo will attach after the "project_utils" environment
-#'   ````
+#'   ````r attach_source("project_utils.R", name = "project_utils)
+#'   set_library_default_pos(after = "project_utils") library(foo) # now foo
+#'   will attach after the "project_utils" environment ````
 #' @param ... Ignored. Arguments must be named
 #' @param after,before string; the name of the environment on the search path
 #'   that library() calls should by default attach after or before.
 #' @param value The value (or quoted expression) the new argument should be.
 #'
 #' @return the original default value of `pos`, invisibly
-#' @export
 set_library_default_pos <- function(..., after = NULL, before = NULL, value = NULL) {
   if(...length())
     stop("Argument supplied must be named")

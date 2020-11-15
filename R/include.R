@@ -37,14 +37,14 @@ include <-
                keep.parse.data = getOption("keep.parse.data"))
     here <- environment()
 
-    for (file in get_r_files(files_andor_dirs, recursive = recursive))
+    for (file in find_r_files(files_andor_dirs, recursive = recursive))
       eval(cl, here)
 
     invisible(envir)
   }
 
 
-get_r_files <- function(files_andor_dirs,
+find_r_files <- function(files_andor_dirs,
                         pattern = "^[^._].+\\.[Rr]$",
                         recursive = FALSE) {
 
@@ -54,12 +54,8 @@ get_r_files <- function(files_andor_dirs,
     explicit_files <- x[!is_dir]
     x <- as.list(x)
     x[is_dir] <- lapply(x[is_dir], function(path) {
-      files <- list.files(
-        path,
-        pattern = pattern,
-        full.names = TRUE,
-        recursive = recursive
-      )
+      files <- list.files(path, pattern = pattern,
+                          full.names = TRUE, recursive = recursive)
       files <- setdiff(files, explicit_files)
       files[order(basename(files))]
     })

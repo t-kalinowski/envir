@@ -1,4 +1,4 @@
-#' Source R files into an attached environment
+#' Source R files in an attached environment
 #'
 #' @param ... filepaths to R files, or paths to directories containing R files.
 #' @param name A string, the name for the attached environment. By default, the
@@ -17,24 +17,44 @@
 #'   the search path without signaling a warning if `warn.conflicts` is `TRUE`
 #'
 #' @note One subtlety that is sometimes important: the global environment or any
-#'   packages attached after this is called will not on the search path for the
-#'   environment where the source is evaluated. The search path of the
-#'   environment the R files are sourced in is `search()[-(1:(pos-1))]`. So
-#'   for, example, functions defined in the sources will not see functions from
-#'   subsequent `library` calls. This is by design. However, if you want the R
-#'   functions defined in the sources to have the global environment (and all
-#'   other attached environments) on their search path, then you can do
-#'   something like:
+#'   packages attached after this environment is created will be not on the search
+#'   path for the environment where the source is evaluated. The search path of
+#'   the environment the R files are sourced in is `search()[-(1:(pos-1))]`.
 #'
-#'   ```` attach_eval({ import_from(c(filepaths), "**") }) ````
+#'   This means that, for example, if you source a script that calls `library`,
+#'   the code in that script will not "see" the functions from the attached
+#'   packages. This is by design. However, if you want to source scripts that
+#'   call `library` and define new functions, and you want those new functions
+#'   to "see" the `library` attached packages, here are 3 ways to do that:
 #'
-#'   Instead of sourcing files directly in the attached environment, this snippet
-#'   sources the files into a new environment that inherits from `.Globalenv`,
-#'   and then copies over everything to the attached environment.
+#'   1.  Attach all the packages you want before attaching the script
 #'
+#'   ````r
+#'   library(foo); library(bar)
+#'   attach_source("my_script.R")
+#'   ````
+#'
+#'   2.  Modify the default `pos` argument to `library`, so all new packages
+#'   attach after your script:
+#'
+#'   ````r
+#'   envir:::set_default_library_pos(after = "source:my_script.R")
+#'   attach_source("my_script.R")
+#'   ````
+#'
+#'   3.  This is the likely the most preferred solution. Instead of sourcing
+#'   files directly in the attached environment, source the files into a new
+#'   environment that inherits from `.Globalenv`, and then copy over everything
+#'   to the attached environment.
+#'
+#'   ````r
+#'   attach_eval({
+#'     import_from("my_script.R")
+#'   })
+#'   ````
 #'
 #' @return the attached environment, invisibly.
-#' @seealso import_from, set_library_default_pos
+#' @seealso [import_from], [set_library_default_pos]
 #' @export
 attach_source <- function(..., # files_andor_dirs,
                           name = as_tidy_env_name(c(...), prefix = "source:"),

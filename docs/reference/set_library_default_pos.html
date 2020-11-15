@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Modify default attach position for base::library() — set_library_default_pos" />
-<meta property="og:description" content="Modify default attach position for base::library()" />
+<meta property="og:description" content="This function is documented but not exported. Reach in with
+envir:::set_library_default_pos() to use it." />
 
 
 
@@ -103,7 +104,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Modify default attach position for <code><a href='https://rdrr.io/r/base/library.html'>base::library()</a></code></p>
+    <p>This function is documented but not exported. Reach in with
+<code>envir:::set_library_default_pos()</code> to use it.</p>
     </div>
 
     <pre class="usage"><span class='fu'>set_library_default_pos</span><span class='op'>(</span><span class='va'>...</span>, after <span class='op'>=</span> <span class='cn'>NULL</span>, before <span class='op'>=</span> <span class='cn'>NULL</span>, value <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -135,9 +137,8 @@ that library() calls should by default attach after or before.</p></td>
 search path. For example, say you have a "project_utils" environment where
 you've defined a variety of useful functions. To prevent future <code><a href='https://rdrr.io/r/base/library.html'>library()</a></code>
 calls from masking any objects in your attached "project_utils"
-environment, you can modify the default <code>pos</code> argument to library.<div class="r"></p><pre>attach_source("project_utils.R", name = "project_utils)
-set_library_default_pos(after = "project_utils")
-library(foo) # now foo will attach after the "project_utils" environment
+environment, you can modify the default <code>pos</code> argument to library.<div class="r attach_source("project_utils.R", name = "project_utils)"></p><pre>set_library_default_pos(after = "project_utils") library(foo) # now foo
+will attach after the "project_utils" environment ````
 </pre><p></div></p>
 
   </div>

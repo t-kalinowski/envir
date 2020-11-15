@@ -2,7 +2,7 @@
 #'
 #' This is inspired by the python idiom `from module import object as new_name`.
 #'
-#' @note, if `x` is a package name, then no check is performed to ensure the
+#' @note If `x` is a package name, then no check is performed to ensure the
 #' object being imported is an exported function. As such, `import_from()` can
 #' be used to access package internal objects, though doing so is usually bad
 #' practice.
@@ -11,7 +11,9 @@
 #'   environment (which could be a python module), or any object with `names`
 #'   and `[[` methods defined.
 #' @param ... objects to import from x into `.into`. if named, the name will be
-#'   the the new name after import. Alternatively, you can also supply the wildcard string "*" or "**", along with some additional overrides. See examples for details.
+#'   the the new name after import. Alternatively, you can also supply the
+#'   wildcard string "*" or "**", along with some additional overrides. See
+#'   examples for details.
 #' @param .into An \R environment, by default the current frame
 #' @param .parent,.chdir,.recursive Only applicable if `x` is a character vector
 #'   of filepaths to R scripts, in which case these are passed on to [include]
@@ -46,8 +48,8 @@
 #' show_whats_imported(envir, "*", -include, -attach_eval)
 #' show_whats_imported(envir, "*", -c(include, attach_eval))
 #'
-#' # import all NAMESPACE exports, also one internal function names `get_r_files`
-#' show_whats_imported(envir, "*", get_r_files)
+#' # import all NAMESPACE exports, also one internal function names `find_r_files`
+#' show_whats_imported(envir, "*", find_r_files)
 #'
 #' # import ALL package functions, including all internal functions
 #' show_whats_imported(envir, "**")
@@ -93,14 +95,28 @@
 #' \dontrun{
 #'   # don't run this so we don't take a reticulate dependency
 #'   import_from(reticulate, py_module = import) # rename object on import
-#'   import_from(py_module("numpy"), random)
+#'
+#'   # import one object
+#'   show_whats_imported(py_module("numpy"), random)
+#'
+#'   # to prevent automatic conversion
+#'   show_whats_imported(py_module("numpy", convert = FALSE), random)
+#'
+#'   # import all objects that don't begin with a `_`
+#'   # by default, other modules found in the module are also not imported
+#'   show_whats_imported(py_module("glob"), "*")
+#'
+#'   # to import EVERYTHING pass "**"
+#'   # now includes modules that your modules imported, like `os`
+#'   show_whats_imported(py_module("glob"), "**")
+#'
+#'   rm(py_module) # clean up
 #' }
 #'
 #' # cleanup
 #' setwd(owd)
 #' unlink(tmpdir, recursive = TRUE)
 #' rm(show_whats_imported, tmpdir, owd)
-#' \dontrun{ rm(py_module, random) }
 import_from <- function(x, ..., .into = parent.frame(),
                         .parent = .GlobalEnv,
                         .chdir = FALSE, .recursive = FALSE) {

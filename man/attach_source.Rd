@@ -2,7 +2,7 @@
 % Please edit documentation in R/attach_source.R
 \name{attach_source}
 \alias{attach_source}
-\title{Source R files into an attached environment}
+\title{Source R files in an attached environment}
 \usage{
 attach_source(
   ...,
@@ -41,25 +41,40 @@ the search path without signaling a warning if \code{warn.conflicts} is \code{TR
 the attached environment, invisibly.
 }
 \description{
-Source R files into an attached environment
+Source R files in an attached environment
 }
 \note{
 One subtlety that is sometimes important: the global environment or any
-packages attached after this is called will not on the search path for the
-environment where the source is evaluated. The search path of the
-environment the R files are sourced in is \code{search()[-(1:(pos-1))]}. So
-for, example, functions defined in the sources will not see functions from
-subsequent \code{library} calls. This is by design. However, if you want the R
-functions defined in the sources to have the global environment (and all
-other attached environments) on their search path, then you can do
-something like:
+packages attached after this environment is created will be not on the search
+path for the environment where the source is evaluated. The search path of
+the environment the R files are sourced in is \code{search()[-(1:(pos-1))]}.
 
-\code{attach_eval({ import_from(c(filepaths), "**") })}
-
-Instead of sourcing files directly in the attached environment, this snippet
-sources the files into a new environment that inherits from \code{.Globalenv},
-and then copies over everything to the attached environment.
+This means that, for example, if you source a script that calls \code{library},
+the code in that script will not "see" the functions from the attached
+packages. This is by design. However, if you want to source scripts that
+call \code{library} and define new functions, and you want those new functions
+to "see" the \code{library} attached packages, here are 3 ways to do that:
+\enumerate{
+\item Attach all the packages you want before attaching the script
+}\if{html}{\out{<div class="r">}}\preformatted{library(foo); library(bar)
+attach_source("my_script.R")
+}\if{html}{\out{</div>}}
+\enumerate{
+\item Modify the default \code{pos} argument to \code{library}, so all new packages
+attach after your script:
+}\if{html}{\out{<div class="r">}}\preformatted{envir:::set_default_library_pos(after = "source:my_script.R")
+attach_source("my_script.R")
+}\if{html}{\out{</div>}}
+\enumerate{
+\item This is the likely the most preferred solution. Instead of sourcing
+files directly in the attached environment, source the files into a new
+environment that inherits from \code{.Globalenv}, and then copy over everything
+to the attached environment.
+}\if{html}{\out{<div class="r">}}\preformatted{attach_eval(\{
+  import_from("my_script.R")
+\})
+}\if{html}{\out{</div>}}
 }
 \seealso{
-import_from, set_library_default_pos
+\link{import_from}, \link{set_library_default_pos}
 }
