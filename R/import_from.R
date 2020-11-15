@@ -1,0 +1,265 @@
+#' import objects
+#'
+#' This is inspired by the python idiom `from module import object as new_name`.
+#'
+#' @note, if `x` is a package name, then no check is performed to ensure the
+#' object being imported is an exported function. As such, `import_from()` can
+#' be used to access package internal objects, though doing so is usually bad
+#' practice.
+#'
+#' @param x a bare symbol name of a package, a character vector of filepaths, an
+#'   environment (which could be a python module), or any object with `names`
+#'   and `[[` methods defined.
+#' @param ... objects to import from x into `.into`. if named, the name will be
+#'   the the new name after import. Alternatively, you can also supply the wildcard string "*" or "**", along with some additional overrides. See examples for details.
+#' @param .into An \R environment, by default the current frame
+#' @param .parent,.chdir,.recursive Only applicable if `x` is a character vector
+#'   of filepaths to R scripts, in which case these are passed on to [include]
+#'   (`chdir`, `recursive`) or [new.env]`(parent)`
+#' @return the \R environment or object that `x` resolved to, invisibly.
+#' @export
+#'
+#' @examples
+#' show_whats_imported <- function(...) {
+#'   import_from(...)
+#'   setdiff(names(environment()), "...")
+#' }
+#'
+#' ## Importing from an R package
+#' # import one object
+#' show_whats_imported(envir, include)
+#'
+#' # rename an object on import
+#' show_whats_imported(envir, sys_source = include)
+#'
+#' # import all NAMESPACE exports
+#' show_whats_imported(envir, "*")
+#' show_whats_imported(envir) # missing `...` is interpreted as "*"
+#'
+#' # import all NAMESPACE exports, except for `include`
+#' show_whats_imported(envir, "*", -include)
+#'
+#' # import all NAMESPACE exports, except rename `include` to `sys_source`
+#' show_whats_imported(envir, "*", sys_source = include)
+#'
+#' # exclude more than one
+#' show_whats_imported(envir, "*", -include, -attach_eval)
+#' show_whats_imported(envir, "*", -c(include, attach_eval))
+#'
+#' # import all NAMESPACE exports, also one internal function names `get_r_files`
+#' show_whats_imported(envir, "*", get_r_files)
+#'
+#' # import ALL package functions, including all internal functions
+#' show_whats_imported(envir, "**")
+#'
+#' # import ALL objects in the package NAMESPACE, including R's NAMESPACE machinery
+#' show_whats_imported(envir, "***")
+#'
+#'
+#' ## Importing from R files
+#' # setup
+#' dir.create(tmpdir <- tempfile())
+#' owd <- setwd(tmpdir)
+#' writeLines(c("useful_function <- function() 'I am useful'",
+#'              ".less_useful_fn <- function() 'less useful'"),
+#'            "my_helpers.R")
+#'
+#' # import one function by name
+#' show_whats_imported("my_helpers.R", useful_function)
+#'
+#' # import all objects whose names don't start with a "." or "_"
+#' show_whats_imported("my_helpers.R", "*")
+#'
+#' # import all objects
+#' show_whats_imported("my_helpers.R", "**")
+#'
+#' # if the filepath to your scripts is stored in a variable, supply it in a call
+#' x <- "my_helpers.R"
+#' try(show_whats_imported(x)) # errors out, because no package 'x'
+#' # to force the value to be used, just supply it as a call rather than a bare symbol.
+#' # the simplest call can be just wrapping in () or {}
+#' show_whats_imported({x})
+#' show_whats_imported((x))
+#' show_whats_imported(c(x))
+#' show_whats_imported({{x}}) # tidyverse style unquoting
+#'
+#' ## Importing R objects
+#'
+#' # if you have an actual R object that you want to import from, you will
+#' # have to supply it in a call
+#' x <- list(obj1 = "one", obj2 = "two")
+#' show_whats_imported({x})
+#'
+#' \dontrun{
+#'   # don't run this so we don't take a reticulate dependency
+#'   import_from(reticulate, py_module = import) # rename object on import
+#'   import_from(py_module("numpy"), random)
+#' }
+#'
+#' # cleanup
+#' setwd(owd)
+#' unlink(tmpdir, recursive = TRUE)
+#' rm(show_whats_imported, tmpdir, owd)
+#' \dontrun{ rm(py_module, random) }
+import_from <- function(x, ..., .into = parent.frame(),
+                        .parent = .GlobalEnv,
+                        .chdir = FALSE, .recursive = FALSE) {
+
+  .into <- tryCatch(as.environment(.into),
+                    error = function(e) get_attached_env(.into))
+
+  from <- if (is.symbol(x_expr <- substitute(x)))
+    getNamespace(x_expr)
+  else if (is.character(x))
+    include(x, envir = new.env(parent = .parent),
+            chdir = .chdir, recursive = .recursive)
+  else if (is.environment(x) || !is.null(names(x)))
+    x
+  else
+    stop(
+      "Failed to resolve object to import from.\n",
+      "`x` must be a bare symbol of a package name, a vector of file paths, a R environment, or an object with names\n",
+      "`x` expression: ", deparse(x_expr), "\n",
+      c("typeof(x): ", typeof(x),
+        "\nclass(x): ", class(x),
+        "\nformat(x):", format(x)))
+
+  imports <- eval(substitute(alist(...)))
+  if (!length(imports))
+    imports <- list("*")
+
+  is_wildcard <-
+    is.character(wildcard <- imports[[1L]]) &&
+    wildcard %in% c("*", "**", "***")
+
+  if (is_wildcard)
+    imports <- resolve_wildcard_imports(from, wildcard, overrides = imports[-1L])
+  else {
+    if (!all(valid <- vapply(imports, is.symbol, TRUE)))
+      stop(
+        'Values supplied to `...` must bare symbols when not using a wildcard',
+        "received: ", imports[!valid])
+    imports <- complete_names(vapply(imports, as.character, ""))
+  }
+
+  # some checks
+  if (anyNA(mch <- match(imports, names_from <- names(from))))
+    stop(sprintf(
+      ngettext(
+        sum(no_match <- is.na(mch)),
+        "Object by this name does not exist: %s",
+        "Objects by these names do not exist: %s"
+      ),
+      paste0("`", unname(imports)[no_match], "`", collapse = ", ")
+    ))
+
+  if (!is.environment(from) && anyDuplicated(mch <- match(names_from, imports))) {
+    stop(sprintf(
+      ngettext(sum(dups <- duplicated(mch) & !is.na(mch)),
+               "Name is not unique: %s",
+               "Names are not unique: %s"),
+      paste0("`", names_from[dups], "`", collapse = ", ")
+    ))
+  }
+
+
+  # can't use mget()/get()/eval() because `from` might be a python module
+  objs <- lapply(imports, function(nm) from[[nm]])
+
+  # don't import imported python modules from python modules, dawg
+  if(is_wildcard && wildcard == "*" && inherits(from, "python.builtin.module"))
+    for(nm in setdiff(names(objs), attr(imports, "overrides", TRUE)))
+      if(inherits(objs[[nm]], c("python.builtin.module", "__future__._Feature")))
+        objs[[nm]] <- NULL
+
+
+  list2env(objs, .into)
+
+  invisible(from)
+}
+
+
+resolve_wildcard_imports <- function(from, wildcard, overrides) {
+  if(!wildcard %in% c("*", "**", "***"))
+    stop('wildcard must be one of: "*", "**", "***"\nReceived: ', wildcard)
+  if (wildcard == "*") {
+
+    imports <- if (isNamespace(from))
+      getNamespaceExports(from)
+    else
+      grep("^[._]", names(from), value = TRUE, invert = TRUE)
+  } else {
+    imports <- names(from)
+    if (isNamespace(from) && wildcard == "**")
+      imports <- setdiff(
+        imports,
+        c(
+          ".__NAMESPACE__.",
+          ".__S3MethodsTable__.",
+          ".packageName",
+          ".First.lib",
+          ".Last.lib",
+          ".onLoad",
+          ".onAttach",
+          ".onDetach",
+          "library.dynam.unload",
+          ".conflicts.OK",
+          # from[[".__NAMESPACE__."]][["S3methods"]][, 3L],
+          ".noGenerics"
+        )
+      )
+  }
+
+  # overrides can be bare symbols, named bare symbols, or a bare symbols with a "-" prefix
+  if(length(overrides)) {
+    is_drop <- vapply(overrides,
+                       function(e) is.call(e) &&
+                         identical(e[[1L]], quote(`-`)) &&
+                         length(e) == 2L, TRUE)
+    if (any(is_drop)) {
+      drops <- unlist(lapply(overrides[is_drop], function(e) {
+        what <- e[[2L]]
+        if (is.symbol(what))
+          as.character(what)
+        else if (is.call(what) &&
+                 identical(what[[1L]], quote(c))) {
+          if (!all(valid <- vapply(what[-1L], is.symbol, TRUE)))
+            stop('Values supplied to -c(...) must bare symbols',
+                 "received: ",
+                 imports[!valid])
+          vapply(what[-1L], as.character, "")
+        }}))
+      imports <- setdiff(imports, drops)
+      overrides <- overrides[!is_drop]
+    }
+  }
+
+  if (length(overrides)) {
+    if (!all(vapply(overrides, is.symbol, TRUE)))
+      stop("Values supplied to `...` must by symbols")
+    overrides <- vapply(overrides, as.character, "")
+
+    # wildcard shouldn't include objects the caller wanted renamed on import
+    imports <- setdiff(imports, overrides)
+
+    # wildcard shouldn't include objects that conflict with target names caller specified
+    imports <- setdiff(imports, names(overrides))
+
+    imports <- c(imports, overrides)
+  }
+
+  structure(complete_names(imports), overrides = overrides)
+}
+
+
+complete_names <- function(x){
+  stopifnot(is.character(x))
+  nms <- names(x)
+  if (is.null(nms))
+    names(x) <- x
+  else if (!all(named <- nzchar(nms) & !is.na(nms))) {
+    nms[!named] <- x[!named]
+    names(x) <- nms
+  }
+  x
+}
