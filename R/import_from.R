@@ -3,9 +3,9 @@
 #' This is inspired by the python idiom `from module import object as new_name`.
 #'
 #' @note If `x` is a package name, then no check is performed to ensure the
-#' object being imported is an exported function. As such, `import_from()` can
-#' be used to access package internal objects, though doing so is usually bad
-#' practice.
+#'   object being imported is an exported function. As such, `import_from()` can
+#'   be used to access package internal objects, though doing so is usually bad
+#'   practice.
 #'
 #' @param x a bare symbol name of a package, a character vector of filepaths, an
 #'   environment (which could be a python module), or any object with `names`
@@ -14,10 +14,15 @@
 #'   the the new name after import. Alternatively, you can also supply the
 #'   wildcard string "*" or "**", along with some additional overrides. See
 #'   examples for details.
-#' @param .into An \R environment, by default the current frame
+#' @param .into An \R environment, or something coercable to one by
+#'   [`as.environment`], or a character string that is the name of a
+#'   (potentially new) attached environment. The default is the current frame.
 #' @param .parent,.chdir,.recursive Only applicable if `x` is a character vector
 #'   of filepaths to R scripts, in which case these are passed on to [include]
 #'   (`chdir`, `recursive`) or [new.env]`(parent)`
+#' @param .pos Only applicable if `.into` is a string that is the name of a new
+#'   environment that will be attached, the position on environment on the
+#'   search path.
 #' @return the \R environment or object that `x` resolved to, invisibly.
 #' @export
 #'
@@ -119,10 +124,9 @@
 #' rm(show_whats_imported, tmpdir, owd)
 import_from <- function(x, ..., .into = parent.frame(),
                         .parent = .GlobalEnv,
-                        .chdir = FALSE, .recursive = FALSE) {
+                        .chdir = FALSE, .recursive = FALSE, .pos = 2L) {
 
-  .into <- tryCatch(as.environment(.into),
-                    error = function(e) get_attached_env(.into))
+  .into <- as_maybe_attached_env(.into, .pos)
 
   from <- if (is.symbol(x_expr <- substitute(x)))
     getNamespace(x_expr)

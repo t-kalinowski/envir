@@ -5,21 +5,40 @@
 \alias{within.character}
 \title{\code{within} methods for \R environments}
 \usage{
-\method{within}{environment}(data, expr, ...)
+\method{within}{environment}(data, expr, ..., quote = substitute(expr))
 
-\method{within}{character}(data, expr, ..., .pos = 2L)
+\method{within}{character}(
+  data,
+  expr,
+  ...,
+  pos = 2L,
+  warn.conflicts = TRUE,
+  mask.ok = NULL,
+  quote = substitute(expr)
+)
 }
 \arguments{
 \item{data}{An \R environment, or the name of a (potentially new) attached
 environment.}
 
-\item{expr}{The \R expression to evaluate. Automatically quoted.}
+\item{expr}{The bare \R expression to evaluate. Automatically quoted.}
 
 \item{...}{Ignored. Added for compatibility with the S3 generic. Throws an
-error if any arguments are passed to \code{...}}
-
-\item{.pos}{If creating a new attached environment, the position of the newly
+error if any arguments are passed to \code{...}
 attached environment.}
+
+\item{quote}{A R language object. This is an escape hatch from the automatic
+quoting of \code{expr}.}
+
+\item{pos}{The position where to attach the environment, if creating a new
+one. If an environment of \code{name} already exists, \code{pos} is ignored.}
+
+\item{warn.conflicts}{logical. If TRUE (the default), print warnings about
+objects in the attached environment that that are masking or masked by
+other objects of the same name.}
+
+\item{mask.ok}{character vector of names of objects that can mask objects on
+the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
 }
 \value{
 the \R environment, invisibly

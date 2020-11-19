@@ -33,9 +33,9 @@ attach_eval <- function(unquoted_expr, name = "local:utils", pos = 2L,
                         mask.ok = NULL) {
 
   if (...length())
-    stop("Arguments after `...` must be named")
+    stop("Arguments in `...` not allowed.")
 
-  envir <- get_attached_env(name)
+  envir <- as_maybe_attached_env(name, pos)
 
   if (warn.conflicts)
     mask.ok <- c(mask.ok, names(envir))
@@ -45,4 +45,15 @@ attach_eval <- function(unquoted_expr, name = "local:utils", pos = 2L,
   if (warn.conflicts)
     warn_about_conflicts(envir, ignore = mask.ok)
   invisible(envir)
+}
+
+
+as_maybe_attached_env <- function(x, pos = 2L) {
+  tryCatch(
+    as.environment(x),
+    error = function(e)
+      if (is.character(x))
+        (attach)(NULL, pos = pos, name = x, warn.conflicts = FALSE)
+    else
+      stop(e))
 }

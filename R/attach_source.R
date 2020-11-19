@@ -67,7 +67,7 @@ attach_source <- function(..., # files_andor_dirs,
   if(!is.character(name) && identical(length(name), 1L))
     stop("`name` must be a string")
 
-  envir <- get_attached_env(name)
+  envir <- as_maybe_attached_env(name, pos)
 
   if (warn.conflicts)
     mask.ok <- c(mask.ok, names(envir))
@@ -78,15 +78,6 @@ attach_source <- function(..., # files_andor_dirs,
     warn_about_conflicts(envir, ignore = mask.ok)
 
   invisible(envir)
-}
-
-
-get_attached_env <- function(x, pos = 2L) {
-  if(length(x) != 1L) stop("environment requested must be a scalar")
-  if (is.character(x) && !x %in% search())
-    (attach)(NULL, pos = pos, name = x, warn.conflicts = FALSE)
-  else
-    as.environment(x)
 }
 
 
