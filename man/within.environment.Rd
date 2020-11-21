@@ -24,10 +24,9 @@ environment.}
 \item{expr}{The bare \R expression to evaluate. Automatically quoted.}
 
 \item{...}{Ignored. Added for compatibility with the S3 generic. Throws an
-error if any arguments are passed to \code{...}
-attached environment.}
+error if any arguments are passed to \code{...}.}
 
-\item{quote}{A R language object. This is an escape hatch from the automatic
+\item{quote}{An R language object. This is an escape hatch from the automatic
 quoting of \code{expr}.}
 
 \item{pos}{The position where to attach the environment, if creating a new
@@ -41,8 +40,21 @@ other objects of the same name.}
 the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
 }
 \value{
-the \R environment, invisibly
+The \R environment, invisibly.
 }
 \description{
 \code{within} methods for \R environments
+}
+\details{
+The only difference between \code{attach_eval} and \code{within.character} is
+the order of the arguments and the return value; the first
+returns the result of evaluating the expression, the latter the
+environment.
+}
+\note{
+See the note in \code{attach_source} about a potential pitfall of evaluating
+code directly in an attached environment.
+}
+\seealso{
+\link{attach_eval} \link{attach_source} \link{eval} \link{within}
 }

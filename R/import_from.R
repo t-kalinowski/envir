@@ -14,15 +14,15 @@
 #'   the the new name after import. Alternatively, you can also supply the
 #'   wildcard string "*" or "**", along with some additional overrides. See
 #'   examples for details.
-#' @param .into An \R environment, or something coercable to one by
+#' @param .into An \R environment, or something coercible to one by
 #'   [`as.environment`], or a character string that is the name of a
 #'   (potentially new) attached environment. The default is the current frame.
 #' @param .parent,.chdir,.recursive Only applicable if `x` is a character vector
 #'   of filepaths to R scripts, in which case these are passed on to [include]
 #'   (`chdir`, `recursive`) or [new.env]`(parent)`
 #' @param .pos Only applicable if `.into` is a string that is the name of a new
-#'   environment that will be attached, the position on environment on the
-#'   search path.
+#'   environment that will be attached, in which case this will be the position
+#'   on new environment on the search path.
 #' @return the \R environment or object that `x` resolved to, invisibly.
 #' @export
 #'
@@ -138,7 +138,7 @@ import_from <- function(x, ..., .into = parent.frame(),
   else
     stop(
       "Failed to resolve object to import from.\n",
-      "`x` must be a bare symbol of a package name, a vector of file paths, a R environment, or an object with names\n",
+      "`x` must be a bare symbol of a package name, a vector of file paths, an R environment, or an object with names\n",
       "`x` expression: ", deparse(x_expr), "\n",
       c("typeof(x): ", typeof(x),
         "\nclass(x): ", class(x),

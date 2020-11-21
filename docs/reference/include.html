@@ -121,9 +121,9 @@
       <td><p>A character vector of filepaths to <span style="R">R</span> files, or
 directories containing R files. Directories are searched for files that end
 with extension ".R" or ".r", ignoring those that start with a period (<code>.</code>)
-or an underscore (<code>_</code>). The found files files from each directory are sorted by their
-<code><a href='https://rdrr.io/r/base/basename.html'>basename()</a></code> before being sourced. Filepaths can be supplied explicitly to
-override the default sorting.</p></td>
+or an underscore (<code>_</code>). The found files files from each directory are
+sorted by their <code><a href='https://rdrr.io/r/base/basename.html'>basename()</a></code> before being sourced. Filepaths can be
+supplied explicitly to override the default sorting.</p></td>
     </tr>
     <tr>
       <th>envir</th>
@@ -152,8 +152,11 @@ differences. Notably:</p><ul>
 <li><p><code>envir</code> is returned (invisibly)</p></li>
 <li><p><code>keep.source</code> and <code>keep.parse.data</code> default to
 <code><a href='https://rdrr.io/r/base/options.html'>getOption("keep.source")</a></code> and <code><a href='https://rdrr.io/r/base/options.html'>getOption("keep.parse.data")</a></code> respectively,
-instead of <code><a href='https://rdrr.io/r/base/options.html'>getOption("keep.source.pkgs")</a></code>
+instead of <code><a href='https://rdrr.io/r/base/options.html'>getOption("keep.source.pkgs")</a></code> and
 <code><a href='https://rdrr.io/r/base/options.html'>getOption("keep.parse.data.pkgs")</a></code></p></li>
+<li><p><code>toplevel.env</code> is set to <code><a href='https://rdrr.io/r/base/options.html'>getOption("topLevelEnvironment", envir)</a></code>. In
+other words, if the option <code>topLevelEnvironment</code> is already set, it is
+respected.</p></li>
 </ul>
 
 

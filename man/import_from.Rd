@@ -24,7 +24,7 @@ the the new name after import. Alternatively, you can also supply the
 wildcard string "*" or "**", along with some additional overrides. See
 examples for details.}
 
-\item{.into}{An \R environment, or something coercable to one by
+\item{.into}{An \R environment, or something coercible to one by
 \code{\link{as.environment}}, or a character string that is the name of a
 (potentially new) attached environment. The default is the current frame.}
 
@@ -33,8 +33,8 @@ of filepaths to R scripts, in which case these are passed on to \link{include}
 (\code{chdir}, \code{recursive}) or \link{new.env}\code{(parent)}}
 
 \item{.pos}{Only applicable if \code{.into} is a string that is the name of a new
-environment that will be attached, the position on environment on the
-search path.}
+environment that will be attached, in which case this will be the position
+on new environment on the search path.}
 }
 \value{
 the \R environment or object that \code{x} resolved to, invisibly.

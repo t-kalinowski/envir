@@ -30,7 +30,7 @@ See `?import_from` for extended usage examples.
 
 - **`attach_source()`** and **`attach_eval()`**: Evaluate an R script or expression in an attached environment
 
-- **`within()`** S3 methods for R environments and strings (name of an attached environment)
+- **`within()`** S3 methods for R environments.
 
 
 ## Installation

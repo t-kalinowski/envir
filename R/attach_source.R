@@ -69,16 +69,14 @@ attach_source <- function(..., # files_andor_dirs,
 
   envir <- as_maybe_attached_env(name, pos)
 
-  if (warn.conflicts)
+  if (warn.conflicts) {
     mask.ok <- c(mask.ok, names(envir))
+    on.exit(warn_about_conflicts(envir, ignore = mask.ok))
+  }
 
   include(c(...), envir = envir, chdir = chdir, recursive = recursive)
-
-  if (warn.conflicts)
-    warn_about_conflicts(envir, ignore = mask.ok)
-
-  invisible(envir)
 }
+
 
 
 as_tidy_env_name <- function(x, prefix = NULL) {

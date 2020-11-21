@@ -15,9 +15,9 @@ include(
 \item{files_andor_dirs}{A character vector of filepaths to \R files, or
 directories containing R files. Directories are searched for files that end
 with extension ".R" or ".r", ignoring those that start with a period (\code{.})
-or an underscore (\verb{_}). The found files files from each directory are sorted by their
-\code{basename()} before being sourced. Filepaths can be supplied explicitly to
-override the default sorting.}
+or an underscore (\verb{_}). The found files files from each directory are
+sorted by their \code{basename()} before being sourced. Filepaths can be
+supplied explicitly to override the default sorting.}
 
 \item{envir}{An \R environment. By default, the current \R evaluation
 environment.}
@@ -41,7 +41,10 @@ differences. Notably:
 \item \code{envir} is returned (invisibly)
 \item \code{keep.source} and \code{keep.parse.data} default to
 \code{getOption("keep.source")} and \code{getOption("keep.parse.data")} respectively,
-instead of \code{getOption("keep.source.pkgs")}
+instead of \code{getOption("keep.source.pkgs")} and
 \code{getOption("keep.parse.data.pkgs")}
+\item \code{toplevel.env} is set to \code{getOption("topLevelEnvironment", envir)}. In
+other words, if the option \code{topLevelEnvironment} is already set, it is
+respected.
 }
 }

@@ -12,7 +12,7 @@
 #' @param ... Ignored.
 #' @param mask.ok character vector of names of objects that can mask objects on
 #'   the search path without signaling a warning if `warn.conflicts` is `TRUE`
-#' @param expr A R language object. This is an escape hatch from the automatic
+#' @param expr An R language object. This is an escape hatch from the automatic
 #'   quoting of `unquoted_expr`.
 #'
 #' @return The result after evaluating `expr`, invisibly.
@@ -51,8 +51,9 @@ as_maybe_attached_env <- function(x, pos = 2L) {
   tryCatch(
     as.environment(x),
     error = function(e)
-      if (is.character(x))
+      if (is.character(x) && identical(length(x), 1L))
         (attach)(NULL, pos = pos, name = x, warn.conflicts = FALSE)
     else
-      stop(e))
+      stop("Expected an environment, something coercible to one via `as.environment()`, or a string to use as the name for a newly attached environment."))
 }
+

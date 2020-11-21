@@ -30,14 +30,14 @@ other objects of the same name.}
 
 \item{...}{Ignored.}
 
-\item{expr}{A R language object. This is an escape hatch from the automatic
+\item{expr}{An R language object. This is an escape hatch from the automatic
 quoting of \code{unquoted_expr}.}
 
 \item{mask.ok}{character vector of names of objects that can mask objects on
 the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
 }
 \value{
-the attached environment, invisibly.
+The result after evaluating \code{expr}, invisibly.
 }
 \description{
 Evaluate R expressions in an attached environment.

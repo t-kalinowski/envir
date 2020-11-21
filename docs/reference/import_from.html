@@ -112,7 +112,8 @@
   .into <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>,
   .parent <span class='op'>=</span> <span class='va'>.GlobalEnv</span>,
   .chdir <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  .recursive <span class='op'>=</span> <span class='cn'>FALSE</span>
+  .recursive <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .pos <span class='op'>=</span> <span class='fl'>2L</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -133,13 +134,21 @@ examples for details.</p></td>
     </tr>
     <tr>
       <th>.into</th>
-      <td><p>An <span style="R">R</span> environment, by default the current frame</p></td>
+      <td><p>An <span style="R">R</span> environment, or something coercible to one by
+<code><a href='https://rdrr.io/r/base/as.environment.html'>as.environment</a></code>, or a character string that is the name of a
+(potentially new) attached environment. The default is the current frame.</p></td>
     </tr>
     <tr>
       <th>.parent, .chdir, .recursive</th>
       <td><p>Only applicable if <code>x</code> is a character vector
 of filepaths to R scripts, in which case these are passed on to <a href='include.html'>include</a>
 (<code>chdir</code>, <code>recursive</code>) or <a href='https://rdrr.io/r/base/environment.html'>new.env</a><code>(parent)</code></p></td>
+    </tr>
+    <tr>
+      <th>.pos</th>
+      <td><p>Only applicable if <code>.into</code> is a string that is the name of a new
+environment that will be attached, in which case this will be the position
+on new environment on the search path.</p></td>
     </tr>
     </table>
 
@@ -188,9 +197,9 @@ practice.</p>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"**"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;  [1] "include"                  "import_from"             
 #&gt;  [3] "attach_source"            "complete_names"          
-#&gt;  [5] "set_library_default_pos"  "find_r_files"            
-#&gt;  [7] "warn_about_conflicts"     "within.environment"      
-#&gt;  [9] "as_maybe_attached_env"         "as_tidy_env_name"        
+#&gt;  [5] "set_library_default_pos"  "as_maybe_attached_env"   
+#&gt;  [7] "find_r_files"             "warn_about_conflicts"    
+#&gt;  [9] "within.environment"       "as_tidy_env_name"        
 #&gt; [11] "resolve_wildcard_imports" "within.character"        
 #&gt; [13] "attach_eval"             </div><div class='input'>
 <span class='co'># import ALL objects in the package NAMESPACE, including R's NAMESPACE machinery</span>
@@ -199,8 +208,8 @@ practice.</p>
 #&gt;  [3] ".__S3MethodsTable__."     ".__NAMESPACE__."         
 #&gt;  [5] "attach_source"            "complete_names"          
 #&gt;  [7] "set_library_default_pos"  ".packageName"            
-#&gt;  [9] "find_r_files"             "warn_about_conflicts"    
-#&gt; [11] "within.environment"       "as_maybe_attached_env"        
+#&gt;  [9] "as_maybe_attached_env"    "find_r_files"            
+#&gt; [11] "warn_about_conflicts"     "within.environment"      
 #&gt; [13] "as_tidy_env_name"         "resolve_wildcard_imports"
 #&gt; [15] "within.character"         "attach_eval"             </div><div class='input'>
 
