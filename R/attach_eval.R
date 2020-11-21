@@ -15,7 +15,7 @@
 #' @param expr A R language object. This is an escape hatch from the automatic
 #'   quoting of `unquoted_expr`.
 #'
-#' @return the attached environment, invisibly.
+#' @return The result after evaluating `expr`, invisibly.
 #' @export
 #'
 #' @examples
@@ -37,15 +37,14 @@ attach_eval <- function(unquoted_expr, name = "local:utils", pos = 2L,
 
   envir <- as_maybe_attached_env(name, pos)
 
-  if (warn.conflicts)
+  if (warn.conflicts) {
     mask.ok <- c(mask.ok, names(envir))
+    on.exit(warn_about_conflicts(envir, ignore = mask.ok))
+  }
 
-  eval(expr, envir)
-
-  if (warn.conflicts)
-    warn_about_conflicts(envir, ignore = mask.ok)
-  invisible(envir)
+  invisible(eval(expr, envir))
 }
+
 
 
 as_maybe_attached_env <- function(x, pos = 2L) {
