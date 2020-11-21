@@ -47,15 +47,16 @@ Source R files in an attached environment
 One subtlety that is sometimes important: the global environment or any
 packages attached after this environment is created will be not on the search
 path for the environment where the source is evaluated. The search path of
-the environment the R files are sourced in is \code{search()[-(1:(pos-1))]}.
+the environment the R files are sourced in is \code{tail(search(), -pos)}.
 
-This means that, for example, if you source a script that calls \code{library},
-the code in that script will not "see" the functions from the attached
-packages. This is by design. However, if you want to source scripts that
-call \code{library} and define new functions, and you want those new functions
-to "see" the \code{library} attached packages, here are 3 ways to do that:
+This means that, for example, if you source a script that calls
+\code{library()}, the code in that script will not "see" the functions from the
+newly attached packages. This is by design. However, if you want to source
+scripts that call \code{library} and define new functions, and you want those
+new functions to "see" the \code{library} attached packages, here are 3 ways to
+do that:
 \enumerate{
-\item Attach all the packages you want before attaching the script
+\item Attach all the packages you want before attaching the script:
 }\if{html}{\out{<div class="r">}}\preformatted{library(foo); library(bar)
 attach_source("my_script.R")
 }\if{html}{\out{</div>}}

@@ -9,9 +9,11 @@
 #'   calls from masking any objects in your attached "project_utils"
 #'   environment, you can modify the default `pos` argument to library.
 #'
-#'   ````r attach_source("project_utils.R", name = "project_utils)
-#'   set_library_default_pos(after = "project_utils") library(foo) # now foo
-#'   will attach after the "project_utils" environment ````
+#'   ````r
+#'   attach_source("project_utils.R", name = "project_utils)
+#'   set_library_default_pos(after = "project_utils")
+#'   library(foo) # now foo will attach after the "project_utils" environment
+#'   ````
 #' @param ... Ignored. Arguments must be named
 #' @param after,before string; the name of the environment on the search path
 #'   that library() calls should by default attach after or before.

@@ -19,16 +19,16 @@
 #' @note One subtlety that is sometimes important: the global environment or any
 #'   packages attached after this environment is created will be not on the search
 #'   path for the environment where the source is evaluated. The search path of
-#'   the environment the R files are sourced in is `search()[-(1:(pos-1))]`.
+#'   the environment the R files are sourced in is `tail(search(), -pos)`.
 #'
-#'   This means that, for example, if you source a script that calls `library`,
-#'   the code in that script will not "see" the functions from the attached
-#'   packages. This is by design. However, if you want to source scripts that
-#'   call `library` and define new functions, and you want those new functions
-#'   to "see" the `library` attached packages, here are 3 ways to do that:
+#'   This means that, for example, if you source a script that calls
+#'   `library()`, the code in that script will not "see" the functions from the
+#'   newly attached packages. This is by design. However, if you want to source
+#'   scripts that call `library` and define new functions, and you want those
+#'   new functions to "see" the `library` attached packages, here are 3 ways to
+#'   do that:
 #'
-#'   1.  Attach all the packages you want before attaching the script
-#'
+#'   1.  Attach all the packages you want before attaching the script:
 #'   ````r
 #'   library(foo); library(bar)
 #'   attach_source("my_script.R")
@@ -36,7 +36,6 @@
 #'
 #'   2.  Modify the default `pos` argument to `library`, so all new packages
 #'   attach after your script:
-#'
 #'   ````r
 #'   envir:::set_default_library_pos(after = "source:my_script.R")
 #'   attach_source("my_script.R")
@@ -46,7 +45,6 @@
 #'   files directly in the attached environment, source the files into a new
 #'   environment that inherits from `.Globalenv`, and then copy over everything
 #'   to the attached environment.
-#'
 #'   ````r
 #'   attach_eval({
 #'     import_from("my_script.R")

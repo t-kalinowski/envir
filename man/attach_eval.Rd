@@ -34,7 +34,7 @@ other objects of the same name.}
 quoting of \code{unquoted_expr}.}
 
 \item{mask.ok}{character vector of names of objects that can mask objects on
-the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
+the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}.}
 }
 \value{
 The result after evaluating \code{expr}, invisibly.

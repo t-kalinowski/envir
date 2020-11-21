@@ -37,7 +37,7 @@ objects in the attached environment that that are masking or masked by
 other objects of the same name.}
 
 \item{mask.ok}{character vector of names of objects that can mask objects on
-the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
+the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}.}
 }
 \value{
 The \R environment, invisibly.

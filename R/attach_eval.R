@@ -11,7 +11,7 @@
 #'   other objects of the same name.
 #' @param ... Ignored.
 #' @param mask.ok character vector of names of objects that can mask objects on
-#'   the search path without signaling a warning if `warn.conflicts` is `TRUE`
+#'   the search path without signaling a warning if `warn.conflicts` is `TRUE`.
 #' @param expr An R language object. This is an escape hatch from the automatic
 #'   quoting of `unquoted_expr`.
 #'

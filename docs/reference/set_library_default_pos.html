@@ -142,8 +142,9 @@ that library() calls should by default attach after or before.</p></td>
 search path. For example, say you have a "project_utils" environment where
 you've defined a variety of useful functions. To prevent future <code><a href='https://rdrr.io/r/base/library.html'>library()</a></code>
 calls from masking any objects in your attached "project_utils"
-environment, you can modify the default <code>pos</code> argument to library.<div class="r attach_source("project_utils.R", name = "project_utils)"></p><pre>set_library_default_pos(after = "project_utils") library(foo) # now foo
-will attach after the "project_utils" environment ````
+environment, you can modify the default <code>pos</code> argument to library.<div class="r"></p><pre>attach_source("project_utils.R", name = "project_utils)
+set_library_default_pos(after = "project_utils")
+library(foo) # now foo will attach after the "project_utils" environment
 </pre><p></div></p>
 
   </div>
