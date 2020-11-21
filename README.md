@@ -35,13 +35,13 @@ See `?import_from` for extended usage examples.
 
 ## Installation
 
-<!-- You can install the released version of envir from [CRAN](https://CRAN.R-project.org) with: -->
+You can install the released version of envir from [CRAN](https://CRAN.R-project.org) with:
 
-<!-- ``` r -->
-<!-- install.packages("envir") -->
-<!-- ``` -->
+``` r
+install.packages("envir")
+```
 
-<!-- Or install the development version with -->
+Or install the development version with:
 
 ``` r
 if (!requireNamespace("remotes", quietly = TRUE)) 
