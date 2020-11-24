@@ -211,11 +211,12 @@ practice.</p>
 </div><div class='output co'>#&gt;  [1] "include"                       "import_from"                  
 #&gt;  [3] "attach_source"                 "complete_names"               
 #&gt;  [5] "check_requested_imports_valid" "set_library_default_pos"      
-#&gt;  [7] "check_all_symbols"             "as_maybe_attached_env"        
-#&gt;  [9] "check_overwrite"               "find_r_files"                 
-#&gt; [11] "warn_about_conflicts"          "within.environment"           
-#&gt; [13] "as_tidy_env_name"              "resolve_wildcard_imports"     
-#&gt; [15] "within.character"              "attach_eval"                  </div><div class='input'>
+#&gt;  [7] "check_all_symbols"             "str_collapse"                 
+#&gt;  [9] "as_maybe_attached_env"         "check_overwrite"              
+#&gt; [11] "find_r_files"                  "warn_about_conflicts"         
+#&gt; [13] "within.environment"            "as_tidy_env_name"             
+#&gt; [15] "resolve_wildcard_imports"      "within.character"             
+#&gt; [17] "attach_eval"                  </div><div class='input'>
 <span class='co'># import ALL objects in the package NAMESPACE, including R's NAMESPACE machinery</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"***"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;  [1] "include"                       "import_from"                  
@@ -223,11 +224,11 @@ practice.</p>
 #&gt;  [5] "attach_source"                 "complete_names"               
 #&gt;  [7] "check_requested_imports_valid" "set_library_default_pos"      
 #&gt;  [9] ".packageName"                  "check_all_symbols"            
-#&gt; [11] "as_maybe_attached_env"         "check_overwrite"              
-#&gt; [13] "find_r_files"                  "warn_about_conflicts"         
-#&gt; [15] "within.environment"            "as_tidy_env_name"             
-#&gt; [17] "resolve_wildcard_imports"      "within.character"             
-#&gt; [19] "attach_eval"                  </div><div class='input'>
+#&gt; [11] "str_collapse"                  "as_maybe_attached_env"        
+#&gt; [13] "check_overwrite"               "find_r_files"                 
+#&gt; [15] "warn_about_conflicts"          "within.environment"           
+#&gt; [17] "as_tidy_env_name"              "resolve_wildcard_imports"     
+#&gt; [19] "within.character"              "attach_eval"                  </div><div class='input'>
 
 <span class='co'>## Importing from R files</span>
 <span class='co'># setup</span>

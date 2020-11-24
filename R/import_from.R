@@ -183,6 +183,7 @@ import_from <- function(x, ..., .into = parent.frame(),
   invisible(from)
 }
 
+
 check_overwrite <- function(action, dest, new_bindings) {
 
   action <-
@@ -196,15 +197,20 @@ check_overwrite <- function(action, dest, new_bindings) {
     exists(nm, envir = dest, inherits = FALSE), TRUE)
 
   if (any(already_exists)) {
-    msg <-
-      paste(
-        "Bindings already exist in destination environment:",
-        paste0("`", new_bindings[already_exists], "`", collapse = " ,")
-      )
+    w <- as.integer(max(80L, width.cutoff = 0.9 * getOption("width")))
+
+    cl <- deparse(sys.call(1L), "\n", width.cutoff = w, nlines = 5L)
+    cl <- str_collapse(cl, prefix = "In call:")
+
+    msg <- str_collapse(strwrap(
+      initial = "Bindings already exist in destination environment:",
+      paste0("`", new_bindings[already_exists], "`", collapse = ", "),
+      width = w, exdent = 4L))
+    msg <- paste0(cl, "\n", msg)
 
     switch(action,
-           warn = warning(msg, "\nThey have been overwritten."),
-           stop = stop(msg))
+           warn = warning(msg, "\nThey have been overwritten.", call. = FALSE),
+           error = stop(msg, call. = FALSE))
   }
 }
 
@@ -327,3 +333,12 @@ complete_names <- function(x){
   }
   x
 }
+
+
+str_collapse <- function(x, trunc = 4L, prefix = NULL) {
+  if(length(x) > trunc)
+    x <- c(x[1L:(trunc-1L)], "    [... <truncated>]")
+  x <- c(prefix, x)
+  paste0(x, collapse = "\n")
+}
+
