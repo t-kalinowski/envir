@@ -23,6 +23,10 @@
 #' @param .pos Only applicable if `.into` is a string that is the name of a new
 #'   environment that will be attached, in which case this will be the position
 #'   on new environment on the search path.
+#' @param .overwrite One of `"warn"`, `"error"` or `"ignore"`. Can also be a
+#'   boolean `TRUE` (same as `"ignore"`) or `FALSE` (same as `"error"`). What
+#'   should be done if the requested import operation would overwrite an
+#'   existing object.
 #' @return the \R environment or object that `x` resolved to, invisibly.
 #' @export
 #'
@@ -124,6 +128,7 @@
 #' rm(show_whats_imported, tmpdir, owd)
 import_from <- function(x, ..., .into = parent.frame(),
                         .parent = .GlobalEnv,
+                        .overwrite = if(interactive()) "warn" else "error",
                         .chdir = FALSE, .recursive = FALSE, .pos = 2L) {
 
   .into <- as_maybe_attached_env(.into, .pos)
@@ -161,6 +166,7 @@ import_from <- function(x, ..., .into = parent.frame(),
   }
 
   check_requested_imports_valid(from, imports)
+  check_overwrite(.overwrite, .into, names(imports))
 
   # can't use mget()/get()/eval() because `from` might be a python module
   objs <- lapply(imports, function(nm) from[[nm]])
@@ -177,6 +183,30 @@ import_from <- function(x, ..., .into = parent.frame(),
   invisible(from)
 }
 
+check_overwrite <- function(action, dest, new_bindings) {
+
+  action <-
+    if(isTRUE(action)) "ignore"
+  else if (isFALSE(action)) "error"
+  else match.arg(action, c("warn", "error", "ignore"))
+
+  if (action == "ignore") return()
+
+  already_exists <- vapply(new_bindings, function(nm)
+    exists(nm, envir = dest, inherits = FALSE), TRUE)
+
+  if (any(already_exists)) {
+    msg <-
+      paste(
+        "Bindings already exist in destination environment:",
+        paste0("`", new_bindings[already_exists], "`", collapse = " ,")
+      )
+
+    switch(action,
+           warn = warning(msg, "\nThey have been overwritten."),
+           stop = stop(msg))
+  }
+}
 
 check_all_symbols <- function(x) {
   if (!all(valid <- vapply(x, is.symbol, TRUE)))

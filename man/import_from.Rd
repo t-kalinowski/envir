@@ -9,6 +9,7 @@ import_from(
   ...,
   .into = parent.frame(),
   .parent = .GlobalEnv,
+  .overwrite = if (interactive()) "warn" else "error",
   .chdir = FALSE,
   .recursive = FALSE,
   .pos = 2L
@@ -31,6 +32,11 @@ examples for details.}
 \item{.parent, .chdir, .recursive}{Only applicable if \code{x} is a character vector
 of filepaths to R scripts, in which case these are passed on to \link{include}
 (\code{chdir}, \code{recursive}) or \link{new.env}\code{(parent)}}
+
+\item{.overwrite}{One of \code{"warn"}, \code{"error"} or \code{"ignore"}. Can also be a
+boolean \code{TRUE} (same as \code{"ignore"}) or \code{FALSE} (same as \code{"error"}). What
+should be done if the requested import operation would overwrite an
+existing object.}
 
 \item{.pos}{Only applicable if \code{.into} is a string that is the name of a new
 environment that will be attached, in which case this will be the position

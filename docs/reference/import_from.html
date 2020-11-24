@@ -116,6 +116,7 @@
   <span class='va'>...</span>,
   .into <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>,
   .parent <span class='op'>=</span> <span class='va'>.GlobalEnv</span>,
+  .overwrite <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='st'>"warn"</span> <span class='kw'>else</span> <span class='st'>"error"</span>,
   .chdir <span class='op'>=</span> <span class='cn'>FALSE</span>,
   .recursive <span class='op'>=</span> <span class='cn'>FALSE</span>,
   .pos <span class='op'>=</span> <span class='fl'>2L</span>
@@ -148,6 +149,13 @@ examples for details.</p></td>
       <td><p>Only applicable if <code>x</code> is a character vector
 of filepaths to R scripts, in which case these are passed on to <a href='include.html'>include</a>
 (<code>chdir</code>, <code>recursive</code>) or <a href='https://rdrr.io/r/base/environment.html'>new.env</a><code>(parent)</code></p></td>
+    </tr>
+    <tr>
+      <th>.overwrite</th>
+      <td><p>One of <code>"warn"</code>, <code>"error"</code> or <code>"ignore"</code>. Can also be a
+boolean <code>TRUE</code> (same as <code>"ignore"</code>) or <code>FALSE</code> (same as <code>"error"</code>). What
+should be done if the requested import operation would overwrite an
+existing object.</p></td>
     </tr>
     <tr>
       <th>.pos</th>
@@ -200,23 +208,26 @@ practice.</p>
 #&gt; [5] "attach_eval"  </div><div class='input'>
 <span class='co'># import ALL package functions, including all internal functions</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"**"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "include"                  "import_from"             
-#&gt;  [3] "attach_source"            "complete_names"          
-#&gt;  [5] "set_library_default_pos"  "as_maybe_attached_env"   
-#&gt;  [7] "find_r_files"             "warn_about_conflicts"    
-#&gt;  [9] "within.environment"       "as_tidy_env_name"        
-#&gt; [11] "resolve_wildcard_imports" "within.character"        
-#&gt; [13] "attach_eval"             </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "include"                       "import_from"                  
+#&gt;  [3] "attach_source"                 "complete_names"               
+#&gt;  [5] "check_requested_imports_valid" "set_library_default_pos"      
+#&gt;  [7] "check_all_symbols"             "as_maybe_attached_env"        
+#&gt;  [9] "check_overwrite"               "find_r_files"                 
+#&gt; [11] "warn_about_conflicts"          "within.environment"           
+#&gt; [13] "as_tidy_env_name"              "resolve_wildcard_imports"     
+#&gt; [15] "within.character"              "attach_eval"                  </div><div class='input'>
 <span class='co'># import ALL objects in the package NAMESPACE, including R's NAMESPACE machinery</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"***"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "include"                  "import_from"             
-#&gt;  [3] ".__S3MethodsTable__."     ".__NAMESPACE__."         
-#&gt;  [5] "attach_source"            "complete_names"          
-#&gt;  [7] "set_library_default_pos"  ".packageName"            
-#&gt;  [9] "as_maybe_attached_env"    "find_r_files"            
-#&gt; [11] "warn_about_conflicts"     "within.environment"      
-#&gt; [13] "as_tidy_env_name"         "resolve_wildcard_imports"
-#&gt; [15] "within.character"         "attach_eval"             </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "include"                       "import_from"                  
+#&gt;  [3] ".__S3MethodsTable__."          ".__NAMESPACE__."              
+#&gt;  [5] "attach_source"                 "complete_names"               
+#&gt;  [7] "check_requested_imports_valid" "set_library_default_pos"      
+#&gt;  [9] ".packageName"                  "check_all_symbols"            
+#&gt; [11] "as_maybe_attached_env"         "check_overwrite"              
+#&gt; [13] "find_r_files"                  "warn_about_conflicts"         
+#&gt; [15] "within.environment"            "as_tidy_env_name"             
+#&gt; [17] "resolve_wildcard_imports"      "within.character"             
+#&gt; [19] "attach_eval"                  </div><div class='input'>
 
 <span class='co'>## Importing from R files</span>
 <span class='co'># setup</span>
