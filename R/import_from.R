@@ -152,36 +152,15 @@ import_from <- function(x, ..., .into = parent.frame(),
     is.character(wildcard <- imports[[1L]]) &&
     wildcard %in% c("*", "**", "***")
 
-  if (is_wildcard)
-    imports <- resolve_wildcard_imports(from, wildcard, overrides = imports[-1L])
+  imports <-
+    if (is_wildcard)
+      resolve_wildcard_imports(from, wildcard, overrides = imports[-1L])
   else {
-    if (!all(valid <- vapply(imports, is.symbol, TRUE)))
-      stop(
-        'Values supplied to `...` must bare symbols when not using a wildcard',
-        "received: ", imports[!valid])
-    imports <- complete_names(vapply(imports, as.character, ""))
+    check_all_symbols(imports)
+    complete_names(vapply(imports, as.character, ""))
   }
 
-  # some checks
-  if (anyNA(mch <- match(imports, names_from <- names(from))))
-    stop(sprintf(
-      ngettext(
-        sum(no_match <- is.na(mch)),
-        "Object by this name does not exist: %s",
-        "Objects by these names do not exist: %s"
-      ),
-      paste0("`", unname(imports)[no_match], "`", collapse = ", ")
-    ))
-
-  if (!is.environment(from) && anyDuplicated(mch <- match(names_from, imports))) {
-    stop(sprintf(
-      ngettext(sum(dups <- duplicated(mch) & !is.na(mch)),
-               "Name is not unique: %s",
-               "Names are not unique: %s"),
-      paste0("`", names_from[dups], "`", collapse = ", ")
-    ))
-  }
-
+  check_requested_imports_valid(from, imports)
 
   # can't use mget()/get()/eval() because `from` might be a python module
   objs <- lapply(imports, function(nm) from[[nm]])
@@ -196,6 +175,41 @@ import_from <- function(x, ..., .into = parent.frame(),
   list2env(objs, .into)
 
   invisible(from)
+}
+
+
+check_all_symbols <- function(x) {
+  if (!all(valid <- vapply(x, is.symbol, TRUE)))
+    stop(
+      'Values supplied to `...` must bare symbols when not using a wildcard',
+      "received: ", x[!valid])
+}
+
+
+
+check_requested_imports_valid <- function(from, imports) {
+  # some checks
+  if (anyNA(mch <- match(imports, names_from <- names(from))))
+    stop(sprintf(
+      ngettext(
+        sum(no_match <- is.na(mch)),
+        "Object by this name does not exist: %s",
+        "Objects by these names do not exist: %s"
+      ),
+      paste0("`", unname(imports)[no_match], "`", collapse = ", ")
+    ))
+
+  if (!is.environment(from) &&
+      anyDuplicated(mch <- match(names_from, imports))) {
+    stop(sprintf(
+      ngettext(
+        sum(dups <- duplicated(mch) & !is.na(mch)),
+        "Name is not unique: %s",
+        "Names are not unique: %s"
+      ),
+      paste0("`", names_from[dups], "`", collapse = ", ")
+    ))
+  }
 }
 
 
