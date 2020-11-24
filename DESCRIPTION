@@ -1,14 +1,14 @@
 Package: envir
-Title: Utilities to Manage R Environments
+Title: Manage R Environments Better
 Version: 0.1.0
 Authors@R:
     person(given = "Tomasz",
            family = "Kalinowski",
            role = c("aut", "cre"),
            email = "kalinowskit@gmail.com")
-Description: Some utilities to manage R environments.
+Description: Provides a small set of functions for managing R environments, with defaults designed to encourage usage patterns that scale well to larger code bases. It provides: import_from(), a flexible way to assign bindings that defaults to the current environment; include(), a vectorized alternative to base::source() that also default to the current environment; and attach_eval() and attach_source(), a way to evaluate expressions in attached environments. Together, these (and other) functions pair to provide a robust alternative to base::library() and base::source().
 License: GPL-3
-URL: https://t-kalinowski.github.io/envir
+URL: https://t-kalinowski.github.io/envir/
 BugReports: https://github.com/t-kalinowski/envir/issues
 Encoding: UTF-8
 LazyData: true
