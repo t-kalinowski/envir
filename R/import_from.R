@@ -129,7 +129,7 @@
 #' rm(show_whats_imported, tmpdir, owd)
 import_from <- function(x, ..., .into = parent.frame(),
                         .parent = .GlobalEnv,
-                        .overwrite = if(interactive()) "warn" else "error",
+                        .overwrite = interactive(),
                         .chdir = FALSE, .recursive = FALSE, .pos = 2L) {
 
   .into <- as_maybe_attached_env(.into, .pos)
