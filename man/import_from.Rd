@@ -9,7 +9,7 @@ import_from(
   ...,
   .into = parent.frame(),
   .parent = .GlobalEnv,
-  .overwrite = if (interactive()) "warn" else "error",
+  .overwrite = interactive(),
   .chdir = FALSE,
   .recursive = FALSE,
   .pos = 2L
@@ -36,14 +36,15 @@ of filepaths to R scripts, in which case these are passed on to \link{include}
 \item{.overwrite}{One of \code{"warn"}, \code{"error"} or \code{"ignore"}. Can also be a
 boolean \code{TRUE} (same as \code{"ignore"}) or \code{FALSE} (same as \code{"error"}). What
 should be done if the requested import operation would overwrite an
-existing object.}
+existing object. Character arguments can be abbreviated as partial matching
+is performed.}
 
 \item{.pos}{Only applicable if \code{.into} is a string that is the name of a new
 environment that will be attached, in which case this will be the position
 on new environment on the search path.}
 }
 \value{
-the \R environment or object that \code{x} resolved to, invisibly.
+The \R environment or object that \code{x} resolved to, invisibly.
 }
 \description{
 This is inspired by the python idiom \verb{from module import object as new_name}.

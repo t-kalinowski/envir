@@ -38,7 +38,7 @@ other objects of the same name.}
 the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
 }
 \value{
-the attached environment, invisibly.
+The attached environment, invisibly.
 }
 \description{
 Source R files in an attached environment

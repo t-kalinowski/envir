@@ -26,8 +26,9 @@
 #' @param .overwrite One of `"warn"`, `"error"` or `"ignore"`. Can also be a
 #'   boolean `TRUE` (same as `"ignore"`) or `FALSE` (same as `"error"`). What
 #'   should be done if the requested import operation would overwrite an
-#'   existing object.
-#' @return the \R environment or object that `x` resolved to, invisibly.
+#'   existing object. Character arguments can be abbreviated as partial matching
+#'   is performed.
+#' @return The \R environment or object that `x` resolved to, invisibly.
 #' @export
 #'
 #' @examples
@@ -255,10 +256,12 @@ resolve_wildcard_imports <- function(from, wildcard, overrides) {
   if (wildcard == "*") {
 
     imports <- if (isNamespace(from))
+      #c(from[[".__NAMESPACE__."]][["S3methods"]][, 3L]),
       getNamespaceExports(from)
     else
       grep("^[._]", names(from), value = TRUE, invert = TRUE)
   } else {
+
     imports <- names(from)
     if (isNamespace(from) && wildcard == "**")
       imports <- setdiff(
@@ -274,7 +277,6 @@ resolve_wildcard_imports <- function(from, wildcard, overrides) {
           ".onDetach",
           "library.dynam.unload",
           ".conflicts.OK",
-          # from[[".__NAMESPACE__."]][["S3methods"]][, 3L],
           ".noGenerics"
         )
       )

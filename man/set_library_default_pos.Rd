@@ -15,7 +15,7 @@ that library() calls should by default attach after or before.}
 \item{value}{The value (or quoted expression) the new argument should be.}
 }
 \value{
-the original default value of \code{pos}, invisibly
+The original default value of \code{pos}, invisibly
 }
 \description{
 This function is documented but not exported. Reach in with

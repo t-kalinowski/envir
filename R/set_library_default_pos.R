@@ -19,7 +19,7 @@
 #'   that library() calls should by default attach after or before.
 #' @param value The value (or quoted expression) the new argument should be.
 #'
-#' @return the original default value of `pos`, invisibly
+#' @return The original default value of `pos`, invisibly
 set_library_default_pos <- function(..., after = NULL, before = NULL, value = NULL) {
   if(...length())
     stop("Argument supplied must be named")

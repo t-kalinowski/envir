@@ -51,7 +51,7 @@
 #'   })
 #'   ````
 #'
-#' @return the attached environment, invisibly.
+#' @return The attached environment, invisibly.
 #' @seealso [import_from], [set_library_default_pos]
 #' @export
 attach_source <- function(..., # files_andor_dirs,
