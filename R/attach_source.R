@@ -62,7 +62,7 @@ attach_source <- function(..., # files_andor_dirs,
                           warn.conflicts = TRUE,
                           mask.ok = NULL) {
 
-  if(!is.character(name) && identical(length(name), 1L))
+  if(!(is.character(name) && identical(length(name), 1L)))
     stop("`name` must be a string")
 
   envir <- as_maybe_attached_env(name, pos)
