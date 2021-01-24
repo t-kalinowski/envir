@@ -236,8 +236,13 @@ check_requested_imports_valid <- function(from, imports) {
       paste0("`", unname(imports)[no_match], "`", collapse = ", ")
     ))
 
-  if (!is.environment(from) &&
-      anyDuplicated(mch <- match(names_from, imports))) {
+  if(is.environment(from))
+    return()
+
+  # check if requested name is not unique in the originating frame
+  mch <- match(names_from, imports)
+  mch <- mch[!is.na(mch)]
+  if(anyDuplicated(mch)) {
     stop(sprintf(
       ngettext(
         sum(dups <- duplicated(mch) & !is.na(mch)),
