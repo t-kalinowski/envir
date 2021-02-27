@@ -1,6 +1,6 @@
 Package: envir
 Title: Manage R Environments Better
-Version: 0.1.0
+Version: 0.2.0
 Authors@R:
     person(given = "Tomasz",
            family = "Kalinowski",
