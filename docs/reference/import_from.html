@@ -72,20 +72,26 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">envir</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/t-kalinowski/envir/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,7 +122,7 @@
   <span class='va'>...</span>,
   .into <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>,
   .parent <span class='op'>=</span> <span class='va'>.GlobalEnv</span>,
-  .overwrite <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='st'>"warn"</span> <span class='kw'>else</span> <span class='st'>"error"</span>,
+  .overwrite <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span>,
   .chdir <span class='op'>=</span> <span class='cn'>FALSE</span>,
   .recursive <span class='op'>=</span> <span class='cn'>FALSE</span>,
   .pos <span class='op'>=</span> <span class='fl'>2L</span>
@@ -179,7 +185,7 @@ practice.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>show_whats_imported</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'>import_from</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>setdiff</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ls.html'>ls</a></span><span class='op'>(</span>all.names <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='st'>"..."</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>setdiff</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/environment.html'>environment</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"..."</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 <span class='co'>## Importing from an R package</span>
@@ -191,45 +197,45 @@ practice.</p>
 </div><div class='output co'>#&gt; [1] "sys_source"</div><div class='input'>
 <span class='co'># import all NAMESPACE exports</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "attach_eval"   "attach_source" "import_from"   "include"      </div><div class='input'><span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span><span class='op'>)</span> <span class='co'># missing `...` is interpreted as "*"</span>
-</div><div class='output co'>#&gt; [1] "attach_eval"   "attach_source" "import_from"   "include"      </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "include"       "import_from"   "attach_source" "attach_eval"  </div><div class='input'><span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span><span class='op'>)</span> <span class='co'># missing `...` is interpreted as "*"</span>
+</div><div class='output co'>#&gt; [1] "include"       "import_from"   "attach_source" "attach_eval"  </div><div class='input'>
 <span class='co'># import all NAMESPACE exports, except for `include`</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span>, <span class='op'>-</span><span class='va'>include</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "attach_eval"   "attach_source" "import_from"  </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "import_from"   "attach_source" "attach_eval"  </div><div class='input'>
 <span class='co'># import all NAMESPACE exports, except rename `include` to `sys_source`</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span>, sys_source <span class='op'>=</span> <span class='va'>include</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "attach_eval"   "attach_source" "import_from"   "sys_source"   </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "sys_source"    "import_from"   "attach_source" "attach_eval"  </div><div class='input'>
 <span class='co'># exclude more than one</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span>, <span class='op'>-</span><span class='va'>include</span>, <span class='op'>-</span><span class='va'>attach_eval</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "attach_source" "import_from"  </div><div class='input'><span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>include</span>, <span class='va'>attach_eval</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "attach_source" "import_from"  </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "import_from"   "attach_source"</div><div class='input'><span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span>, <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>include</span>, <span class='va'>attach_eval</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "import_from"   "attach_source"</div><div class='input'>
 <span class='co'># import all NAMESPACE exports, also one internal function names `find_r_files`</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"*"</span>, <span class='va'>find_r_files</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "attach_eval"   "attach_source" "find_r_files"  "import_from"  
-#&gt; [5] "include"      </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "find_r_files"  "include"       "import_from"   "attach_source"
+#&gt; [5] "attach_eval"  </div><div class='input'>
 <span class='co'># import ALL package functions, including all internal functions</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"**"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "as_maybe_attached_env"         "as_tidy_env_name"             
-#&gt;  [3] "attach_eval"                   "attach_source"                
-#&gt;  [5] "check_all_symbols"             "check_overwrite"              
-#&gt;  [7] "check_requested_imports_valid" "complete_names"               
-#&gt;  [9] "find_r_files"                  "import_from"                  
-#&gt; [11] "include"                       "resolve_wildcard_imports"     
-#&gt; [13] "set_library_default_pos"       "str_collapse"                 
-#&gt; [15] "warn_about_conflicts"          "within.character"             
-#&gt; [17] "within.environment"           </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "include"                       "import_from"                  
+#&gt;  [3] "attach_source"                 "complete_names"               
+#&gt;  [5] "check_requested_imports_valid" "set_library_default_pos"      
+#&gt;  [7] "check_all_symbols"             "str_collapse"                 
+#&gt;  [9] "as_maybe_attached_env"         "check_overwrite"              
+#&gt; [11] "find_r_files"                  "warn_about_conflicts"         
+#&gt; [13] "within.environment"            "as_tidy_env_name"             
+#&gt; [15] "resolve_wildcard_imports"      "within.character"             
+#&gt; [17] "attach_eval"                  </div><div class='input'>
 <span class='co'># import ALL objects in the package NAMESPACE, including R's NAMESPACE machinery</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>envir</span>, <span class='st'>"***"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] ".__NAMESPACE__."               ".__S3MethodsTable__."         
-#&gt;  [3] ".packageName"                  "as_maybe_attached_env"        
-#&gt;  [5] "as_tidy_env_name"              "attach_eval"                  
-#&gt;  [7] "attach_source"                 "check_all_symbols"            
-#&gt;  [9] "check_overwrite"               "check_requested_imports_valid"
-#&gt; [11] "complete_names"                "find_r_files"                 
-#&gt; [13] "import_from"                   "include"                      
-#&gt; [15] "resolve_wildcard_imports"      "set_library_default_pos"      
-#&gt; [17] "str_collapse"                  "warn_about_conflicts"         
-#&gt; [19] "within.character"              "within.environment"           </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "include"                       "import_from"                  
+#&gt;  [3] ".__S3MethodsTable__."          ".__NAMESPACE__."              
+#&gt;  [5] "attach_source"                 "complete_names"               
+#&gt;  [7] "check_requested_imports_valid" "set_library_default_pos"      
+#&gt;  [9] ".packageName"                  "check_all_symbols"            
+#&gt; [11] "str_collapse"                  "as_maybe_attached_env"        
+#&gt; [13] "check_overwrite"               "find_r_files"                 
+#&gt; [15] "warn_about_conflicts"          "within.environment"           
+#&gt; [17] "as_tidy_env_name"              "resolve_wildcard_imports"     
+#&gt; [19] "within.character"              "attach_eval"                  </div><div class='input'>
 
 <span class='co'>## Importing from R files</span>
 <span class='co'># setup</span>
@@ -247,7 +253,7 @@ practice.</p>
 </div><div class='output co'>#&gt; [1] "useful_function"</div><div class='input'>
 <span class='co'># import all objects</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='st'>"my_helpers.R"</span>, <span class='st'>"**"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] ".less_useful_fn" "useful_function"</div><div class='input'>
+</div><div class='output co'>#&gt; [1] "useful_function" ".less_useful_fn"</div><div class='input'>
 <span class='co'># if the filepath to your scripts is stored in a variable, supply it in a call</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='st'>"my_helpers.R"</span>
 <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># errors out, because no package 'x'</span>
@@ -264,32 +270,27 @@ practice.</p>
 <span class='co'># have to supply it in a call</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>obj1 <span class='op'>=</span> <span class='st'>"one"</span>, obj2 <span class='op'>=</span> <span class='st'>"two"</span><span class='op'>)</span>
 <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='op'>{</span><span class='va'>x</span><span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "obj1" "obj2"</div><div class='input'>
-<span class='co'># \dontrun{</span>
+</div><div class='output co'>#&gt; [1] "obj2" "obj1"</div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># don't run this so we don't take a reticulate dependency</span>
   <span class='fu'>import_from</span><span class='op'>(</span><span class='va'>reticulate</span>, py_module <span class='op'>=</span> <span class='va'>import</span><span class='op'>)</span> <span class='co'># rename object on import</span>
 
   <span class='co'># import one object</span>
   <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='fu'>py_module</span><span class='op'>(</span><span class='st'>"numpy"</span><span class='op'>)</span>, <span class='va'>random</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "random"</div><div class='input'>
+
   <span class='co'># to prevent automatic conversion</span>
   <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='fu'>py_module</span><span class='op'>(</span><span class='st'>"numpy"</span>, convert <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, <span class='va'>random</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "random"</div><div class='input'>
+
   <span class='co'># import all objects that don't begin with a `_`</span>
   <span class='co'># by default, other modules found in the module are also not imported</span>
   <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='fu'>py_module</span><span class='op'>(</span><span class='st'>"glob"</span><span class='op'>)</span>, <span class='st'>"*"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "escape"            "glob"              "glob0"            
-#&gt; [4] "glob1"             "has_magic"         "iglob"            
-#&gt; [7] "magic_check"       "magic_check_bytes"</div><div class='input'>
+
   <span class='co'># to import EVERYTHING pass "**"</span>
   <span class='co'># now includes modules that your modules imported, like `os`</span>
   <span class='fu'>show_whats_imported</span><span class='op'>(</span><span class='fu'>py_module</span><span class='op'>(</span><span class='st'>"glob"</span><span class='op'>)</span>, <span class='st'>"**"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "escape"            "fnmatch"           "glob"             
-#&gt;  [4] "glob0"             "glob1"             "has_magic"        
-#&gt;  [7] "iglob"             "magic_check"       "magic_check_bytes"
-#&gt; [10] "os"                "re"               </div><div class='input'>
+
   <span class='fu'><a href='https://rdrr.io/r/base/rm.html'>rm</a></span><span class='op'>(</span><span class='va'>py_module</span><span class='op'>)</span> <span class='co'># clean up</span>
-<span class='co'># }</span>
+<span class='op'>}</span>
 
 <span class='co'># cleanup</span>
 <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='va'>owd</span><span class='op'>)</span>
@@ -311,7 +312,7 @@ practice.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
