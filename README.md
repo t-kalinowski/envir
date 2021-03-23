@@ -59,4 +59,5 @@ Other solutions developed for managing R environments:
 
 +  [modules](https://cran.r-project.org/package=modules)
 +  [import](https://cran.r-project.org/package=import)
++  [box](https://cran.r-project.org/package=box)
 
