@@ -169,8 +169,15 @@ import_from <- function(x, ..., .into = parent.frame(),
   check_requested_imports_valid(from, imports)
   check_overwrite(.overwrite, .into, names(imports))
 
-  # can't use mget()/get()/eval() because `from` might be a python module
-  objs <- lapply(imports, function(nm) from[[nm]])
+  # avoiding mget() here: in R-4.1 it returns a list where
+  # !is.null(names(names(objs))). Seems like a bug but didn't investigate further
+  objs <- if (isNamespace(from))
+    # inherits=TRUE, so can resolve package imports + lazydata
+    lapply(imports, get, envir = from)
+  else
+    # can't use mget()/get()/eval() because `from` might be a python module
+    # also, want inherits=FALSE behavior
+    lapply(imports, function(nm) from[[nm]])
 
   # don't import imported python modules from python modules, dawg
   if(is_wildcard && wildcard == "*" && inherits(from, "python.builtin.module"))
@@ -226,7 +233,10 @@ check_all_symbols <- function(x) {
 
 check_requested_imports_valid <- function(from, imports) {
   # some checks
-  if (anyNA(mch <- match(imports, names_from <- names(from))))
+
+  # check if object exists
+  if (!isNamespace(from) && # get() used on NS throws an error if obj doesn't exist
+      anyNA(mch <- match(imports, names_from <- names(from))))
     stop(sprintf(
       ngettext(
         sum(no_match <- is.na(mch)),
@@ -235,6 +245,7 @@ check_requested_imports_valid <- function(from, imports) {
       ),
       paste0("`", unname(imports)[no_match], "`", collapse = ", ")
     ))
+
 
   if(is.environment(from))
     return()
@@ -255,37 +266,55 @@ check_requested_imports_valid <- function(from, imports) {
 }
 
 
+expand_wildcard_imports_from_namespace <- function(from, wildcard) {
+
+  imports <- getNamespaceExports(from)
+
+  if (wildcard >= 2L)
+    imports <- unique(c(imports, names(from)))
+    # not all exports in NS, some are exported imports
+
+  if (wildcard < 3L)
+    imports <- setdiff(imports, c(
+      ".__NAMESPACE__.",
+      ".__S3MethodsTable__.",
+      ".packageName",
+      ".First.lib",
+      ".Last.lib",
+      ".onLoad",
+      ".onAttach",
+      ".onDetach",
+      "library.dynam.unload",
+      ".conflicts.OK",
+      ".noGenerics"
+    ))
+
+  imports
+}
+
+
+expand_wildcard_imports_from_object <- function(from, wildcard) {
+
+  imports <- names(from)
+
+  if(wildcard < 2L)
+    imports <- grep("^[^._]", imports, value = TRUE)
+
+  imports
+}
+
+
+
 resolve_wildcard_imports <- function(from, wildcard, overrides) {
-  if(!wildcard %in% c("*", "**", "***"))
+  if(is.character(wildcard) && !wildcard %in% c("*", "**", "***"))
     stop('wildcard must be one of: "*", "**", "***"\nReceived: ', wildcard)
-  if (wildcard == "*") {
 
-    imports <- if (isNamespace(from))
-      #c(from[[".__NAMESPACE__."]][["S3methods"]][, 3L]),
-      getNamespaceExports(from)
-    else
-      grep("^[._]", names(from), value = TRUE, invert = TRUE)
-  } else {
+  wildcard <- switch(wildcard, "*" = 1L, "**" = 2L, "***" = 3L)
 
-    imports <- names(from)
-    if (isNamespace(from) && wildcard == "**")
-      imports <- setdiff(
-        imports,
-        c(
-          ".__NAMESPACE__.",
-          ".__S3MethodsTable__.",
-          ".packageName",
-          ".First.lib",
-          ".Last.lib",
-          ".onLoad",
-          ".onAttach",
-          ".onDetach",
-          "library.dynam.unload",
-          ".conflicts.OK",
-          ".noGenerics"
-        )
-      )
-  }
+  imports <- if (isNamespace(from))
+    expand_wildcard_imports_from_namespace(from, wildcard)
+  else
+    expand_wildcard_imports_from_object(from, wildcard)
 
   # overrides can be bare symbols, named bare symbols, or a bare symbols with a "-" prefix
   if(length(overrides)) {
