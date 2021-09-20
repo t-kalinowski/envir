@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">envir</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -86,6 +86,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -173,33 +176,32 @@ the search path without signaling a warning if <code>warn.conflicts</code> is <c
     <p>The attached environment, invisibly.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>One subtlety that is sometimes important: the global environment or any
-packages attached after this environment is created will be not on the search
-path for the environment where the source is evaluated. The search path of
-the environment the R files are sourced in is <code><a href='https://rdrr.io/r/utils/head.html'>tail(search(), -pos)</a></code>.</p>
+    <p>One subtlety that is sometimes important: packages attached after this
+environment is created will be not on the symbol search path for the environment
+where the R source is evaluated. The search path of the environment the R
+files are sourced in is <code><a href='https://rdrr.io/r/utils/head.html'>tail(search(), -pos)</a></code>.</p>
 <p>This means that, for example, if you source a script that calls
 <code><a href='https://rdrr.io/r/base/library.html'>library()</a></code>, the code in that script will not "see" the functions from the
 newly attached packages. This is by design. However, if you want to source
 scripts that call <code>library</code> and define new functions, and you want those
 new functions to "see" the <code>library</code> attached packages, here are 3 ways to
 do that:</p><ol>
-<li><p>Attach all the packages you want before attaching the script:</p></li>
-</ol><p><div class="r"></p><pre><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>foo</span><span class='op'>)</span>; <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>bar</span><span class='op'>)</span>
+<li><p>Attach all the packages you want before attaching the script:<div class="sourceCode r"></p><pre><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>foo</span><span class='op'>)</span>; <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>bar</span><span class='op'>)</span>
 <span class='fu'>attach_source</span><span class='op'>(</span><span class='st'>"my_script.R"</span><span class='op'>)</span>
-</pre><p></div></p><ol>
+</pre><p></div></p></li>
 <li><p>Modify the default <code>pos</code> argument to <code>library</code>, so all new packages
-attach after your script:</p></li>
-</ol><p><div class="r"></p><pre><span class='fu'>envir</span><span class='fu'>:::</span><span class='fu'>set_default_library_pos</span><span class='op'>(</span>after <span class='op'>=</span> <span class='st'>"source:my_script.R"</span><span class='op'>)</span>
+attach after your script:<div class="sourceCode r"></p><pre><span class='fu'>envir</span><span class='fu'>:::</span><span class='fu'>set_default_library_pos</span><span class='op'>(</span>after <span class='op'>=</span> <span class='st'>"source:my_script.R"</span><span class='op'>)</span>
 <span class='fu'>attach_source</span><span class='op'>(</span><span class='st'>"my_script.R"</span><span class='op'>)</span>
-</pre><p></div></p><ol>
+</pre><p></div></p></li>
 <li><p>This is the likely the most preferred solution. Instead of sourcing
 files directly in the attached environment, source the files into a new
 environment that inherits from <code>.Globalenv</code>, and then copy over everything
-to the attached environment.</p></li>
-</ol><p><div class="r"></p><pre><span class='fu'><a href='attach_eval.html'>attach_eval</a></span><span class='op'>(</span><span class='op'>{</span>
+to the attached environment.<div class="sourceCode r"></p><pre><span class='fu'><a href='attach_eval.html'>attach_eval</a></span><span class='op'>(</span><span class='op'>{</span>
   <span class='fu'><a href='import_from.html'>import_from</a></span><span class='op'>(</span><span class='st'>"my_script.R"</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
-</pre><p></div></p>
+</pre><p></div></p></li>
+</ol>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='import_from.html'>import_from</a>, <a href='set_library_default_pos.html'>set_library_default_pos</a></p></div>

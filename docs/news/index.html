@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify default attach position for base::library() — set_library_default_pos • envir</title>
+<title>Changelog • envir</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,7 @@
 
 
 
-<meta property="og:title" content="Modify default attach position for base::library() — set_library_default_pos" />
-<meta property="og:description" content="This function is documented but not exported. Reach in with
-envir:::set_library_default_pos() to use it." />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -60,7 +58,7 @@ envir:::set_library_default_pos() to use it." />
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -112,56 +110,34 @@ envir:::set_library_default_pos() to use it." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Modify default attach position for <code>base::library()</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/t-kalinowski/envir/blob/master/R/set_library_default_pos.R'><code>R/set_library_default_pos.R</code></a></small>
-    <div class="hidden name"><code>set_library_default_pos.Rd</code></div>
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/t-kalinowski/envir/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    <p>This function is documented but not exported. Reach in with
-<code>envir:::set_library_default_pos()</code> to use it.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>set_library_default_pos</span><span class='op'>(</span><span class='va'>...</span>, after <span class='op'>=</span> <span class='cn'>NULL</span>, before <span class='op'>=</span> <span class='cn'>NULL</span>, value <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>Ignored. Arguments must be named</p></td>
-    </tr>
-    <tr>
-      <th>after, before</th>
-      <td><p>string; the name of the environment on the search path
-that library() calls should by default attach after or before.</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>The value (or quoted expression) the new argument should be.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>The original default value of <code>pos</code>, invisibly</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This is primarily a way to "pin" a particular environment on the
-search path. For example, say you have a "project_utils" environment where
-you've defined a variety of useful functions. To prevent future <code><a href='https://rdrr.io/r/base/library.html'>library()</a></code>
-calls from masking any objects in your attached "project_utils"
-environment, you can modify the default <code>pos</code> argument to library.<div class="sourceCode r"></p><pre>attach_source("project_utils.R", name = "project_utils)
-set_library_default_pos(after = "project_utils")
-library(foo) # now foo will attach after the "project_utils" environment
-</pre><p></div></p>
-
+    <div id="envir-021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#envir-021" class="anchor"></a>envir 0.2.1<small> Unreleased </small>
+</h1>
+<ul>
+<li>Fixed issue where <code>import_from</code> would not resolve reexported objects from packages.</li>
+</ul>
+</div>
+    <div id="envir-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#envir-020" class="anchor"></a>envir 0.2.0<small> 2021-02-27 </small>
+</h1>
+<ul>
+<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
 
 
