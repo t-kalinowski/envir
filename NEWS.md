@@ -1,4 +1,4 @@
-# envir (development version)
+# envir 0.2.1
 
 * Fixed issue where `import_from` would not resolve reexported objects from packages. 
 
