@@ -26,7 +26,7 @@ This is primarily a way to "pin" a particular environment on the
 search path. For example, say you have a "project_utils" environment where
 you've defined a variety of useful functions. To prevent future \code{library()}
 calls from masking any objects in your attached "project_utils"
-environment, you can modify the default \code{pos} argument to library.\if{html}{\out{<div class="r">}}\preformatted{attach_source("project_utils.R", name = "project_utils)
+environment, you can modify the default \code{pos} argument to library.\if{html}{\out{<div class="sourceCode r">}}\preformatted{attach_source("project_utils.R", name = "project_utils)
 set_library_default_pos(after = "project_utils")
 library(foo) # now foo will attach after the "project_utils" environment
 }\if{html}{\out{</div>}}

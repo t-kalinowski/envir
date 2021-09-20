@@ -3,3 +3,4 @@
 ^LICENSE\.md$
 docs
 ^CRAN-RELEASE$
+^cran-comments\.md$
