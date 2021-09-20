@@ -27,7 +27,6 @@ See `?import_from` for extended usage examples.
 
 - **`include()`**: A vectorized wrapper around `base::sys.source` that defaults to sourcing in the current frame.
 
-
 - **`attach_source()`** and **`attach_eval()`**: Evaluate an R script or expression in an attached environment
 
 - **`within()`** S3 methods for R environments.
