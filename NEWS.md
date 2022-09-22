@@ -1,5 +1,7 @@
 # envir (development version)
 
+* Regenerated documentation at request of CRAN for compatibility with HTML5.
+
 # envir 0.2.1
 
 * Fixed issue where `import_from` would not resolve reexported objects from packages. 
