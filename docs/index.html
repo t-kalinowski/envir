@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">envir</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -52,7 +48,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/t-kalinowski/envir/">
+  <a href="https://github.com/t-kalinowski/envir/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -69,52 +65,52 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="envir" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#envir" class="anchor"></a>envir</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="envir">envir<a class="anchor" aria-label="anchor" href="#envir"></a>
+</h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
 <p>envir is a small R package with a handful of functions designed for managing R environments.</p>
 <p>The main exported functions are:</p>
 <ul>
 <li>
-<p><strong><code><a href="reference/import_from.html">import_from(x, ...)</a></code></strong>: Import objects from <code>x</code> into the current environment. <code>x</code> can be:</p>
+<p><strong><code>import_from(x, ...)</code></strong>: Import objects from <code>x</code> into the current environment. <code>x</code> can be:</p>
 <ul>
 <li>A package name</li>
 <li>Filepaths to R scripts</li>
-<li>Any object with <code>names</code> and <code><a href="https://rdrr.io/r/base/Extract.html">[[</a></code> methods.</li>
+<li>Any object with <code>names</code> and <code>[[</code> methods.</li>
 </ul>
 <p>Usage example:</p>
-<pre><code><a href="reference/import_from.html">import_from(magrittr, `%&lt;&gt;%`, `%&gt;%`)
-import_from(dplyr, "*") # all exported functions
-import_from("my_script.R", useful_function)</a></code></pre>
+<pre><code><span><span class="fu"><a href="reference/import_from.html">import_from</a></span><span class="op">(</span><span class="va">magrittr</span>, <span class="va">`%&lt;&gt;%`</span>, <span class="va">`%&gt;%`</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/import_from.html">import_from</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="st">"*"</span><span class="op">)</span> <span class="co"># all exported functions</span></span>
+<span><span class="fu"><a href="reference/import_from.html">import_from</a></span><span class="op">(</span><span class="st">"my_script.R"</span>, <span class="va">useful_function</span><span class="op">)</span></span></code></pre>
 <p>See <code><a href="reference/import_from.html">?import_from</a></code> for extended usage examples.</p>
 </li>
-<li><p><strong><code><a href="reference/include.html">include()</a></code></strong>: A vectorized wrapper around <code><a href="https://rdrr.io/r/base/sys.source.html">base::sys.source</a></code> that defaults to sourcing in the current frame.</p></li>
+<li><p><strong><code><a href="reference/include.html">include()</a></code></strong>: A vectorized wrapper around <code><a href="https://rdrr.io/r/base/sys.source.html" class="external-link">base::sys.source</a></code> that defaults to sourcing in the current frame.</p></li>
 <li><p><strong><code><a href="reference/attach_source.html">attach_source()</a></code></strong> and <strong><code><a href="reference/attach_eval.html">attach_eval()</a></code></strong>: Evaluate an R script or expression in an attached environment</p></li>
-<li><p><strong><code><a href="https://rdrr.io/r/base/with.html">within()</a></code></strong> S3 methods for R environments.</p></li>
+<li><p><strong><code><a href="https://rdrr.io/r/base/with.html" class="external-link">within()</a></code></strong> S3 methods for R environments.</p></li>
 </ul>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of envir from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of envir from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"envir"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"envir"</span><span class="op">)</span></span></code></pre></div>
 <p>Or install the development version with:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"t-kalinowski/envir"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"t-kalinowski/envir"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="related-work" class="section level2">
-<h2 class="hasAnchor">
-<a href="#related-work" class="anchor"></a>Related work</h2>
+<div class="section level2">
+<h2 id="related-work">Related work<a class="anchor" aria-label="anchor" href="#related-work"></a>
+</h2>
 <p>R has excellent support for managing environments already, but some of the defaults encourage usage patterns that don’t scale well to larger code bases.</p>
 <p>Other solutions developed for managing R environments:</p>
 <ul>
-<li><a href="https://cran.r-project.org/package=modules">modules</a></li>
-<li><a href="https://cran.r-project.org/package=import">import</a></li>
-<li><a href="https://cran.r-project.org/package=box">box</a></li>
+<li><a href="https://cran.r-project.org/package=modules" class="external-link">modules</a></li>
+<li><a href="https://cran.r-project.org/package=import" class="external-link">import</a></li>
+<li><a href="https://cran.r-project.org/package=box" class="external-link">box</a></li>
 </ul>
 </div>
 </div>
@@ -122,40 +118,51 @@ import_from("my_script.R", useful_function)</a></code></pre>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=envir">https://​cloud.r-project.org/​package=envir</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/t-kalinowski/envir/">https://​github.com/​t-kalinowski/​envir/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/t-kalinowski/envir/issues">https://​github.com/​t-kalinowski/​envir/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=envir" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/t-kalinowski/envir/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/t-kalinowski/envir/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing envir</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Tomasz Kalinowski <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Tomasz Kalinowski.</p>
+  <p></p>
+<p>Developed by Tomasz Kalinowski.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -163,6 +170,8 @@ import_from("my_script.R", useful_function)</a></code></pre>
 
   
 
+
+  
 
   </body>
 </html>
