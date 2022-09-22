@@ -56,17 +56,23 @@ scripts that call \code{library} and define new functions, and you want those
 new functions to "see" the \code{library} attached packages, here are 3 ways to
 do that:
 \enumerate{
-\item Attach all the packages you want before attaching the script:\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(foo); library(bar)
+\item Attach all the packages you want before attaching the script:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(foo); library(bar)
 attach_source("my_script.R")
 }\if{html}{\out{</div>}}
 \item Modify the default \code{pos} argument to \code{library}, so all new packages
-attach after your script:\if{html}{\out{<div class="sourceCode r">}}\preformatted{envir:::set_default_library_pos(after = "source:my_script.R")
+attach after your script:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{envir:::set_default_library_pos(after = "source:my_script.R")
 attach_source("my_script.R")
 }\if{html}{\out{</div>}}
 \item This is the likely the most preferred solution. Instead of sourcing
 files directly in the attached environment, source the files into a new
 environment that inherits from \code{.Globalenv}, and then copy over everything
-to the attached environment.\if{html}{\out{<div class="sourceCode r">}}\preformatted{attach_eval(\{
+to the attached environment.
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{attach_eval(\{
   import_from("my_script.R")
 \})
 }\if{html}{\out{</div>}}
