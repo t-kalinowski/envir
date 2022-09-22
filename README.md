@@ -20,7 +20,7 @@ The main exported functions are:
   Usage example:
   ```
   import_from(magrittr, `%<>%`, `%>%`)
-  import_from(dplyr, "*") # all exported functions
+  import_from(dplyr) # all exported functions
   import_from("my_script.R", useful_function)
   ```
 See `?import_from` for extended usage examples.
