@@ -11,5 +11,5 @@ License: GPL-3
 URL: https://t-kalinowski.github.io/envir/
 BugReports: https://github.com/t-kalinowski/envir/issues
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

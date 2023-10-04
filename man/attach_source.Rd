@@ -2,7 +2,7 @@
 % Please edit documentation in R/attach_source.R
 \name{attach_source}
 \alias{attach_source}
-\title{Source R files in an attached environment}
+\title{Source R files into an attached environment}
 \usage{
 attach_source(
   ...,
@@ -11,7 +11,8 @@ attach_source(
   pos = 2L,
   chdir = FALSE,
   warn.conflicts = TRUE,
-  mask.ok = NULL
+  mask.ok = NULL,
+  parent = .GlobalEnv
 )
 }
 \arguments{
@@ -32,51 +33,28 @@ changed to the directory containing the file(s) being sourced.}
 
 \item{warn.conflicts}{logical. If TRUE (the default), print warnings about
 objects in the attached environment that that are masking or masked by
-other objects of the same name.}
+other objects of the same name. If the environment specified by \code{name} is
+was attached previously, then only newly defined objects are warned about.
+N.B., Even though the name is \code{warn.conflicts}, the messages about
+conflicts are not \code{warning()}s but \code{packageStartupMessage()}s, and can be
+suppressed with \code{suppressPackageStartupMessages()}}
 
 \item{mask.ok}{character vector of names of objects that can mask objects on
-the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}}
+the search path without signaling a warning if \code{warn.conflicts} is \code{TRUE}.
+The sourced R script can also define \code{.mask.OK} in the R environment, which
+has the same effect as passing it as an argument.}
+
+\item{parent}{R environment. If an environment specified by \code{name} is not
+already attached, then the supplied R scripts are first sourced into a new
+environment with the supplied parent. The default of \code{globalenv()} enables
+calling \code{library()} in the scripts and having the subsequent
+code in the scripts "see" the attached packages.}
 }
 \value{
 The attached environment, invisibly.
 }
 \description{
-Source R files in an attached environment
-}
-\note{
-One subtlety that is sometimes important: packages attached after this
-environment is created will be not on the symbol search path for the environment
-where the R source is evaluated. The search path of the environment the R
-files are sourced in is \code{tail(search(), -pos)}.
-
-This means that, for example, if you source a script that calls
-\code{library()}, the code in that script will not "see" the functions from the
-newly attached packages. This is by design. However, if you want to source
-scripts that call \code{library} and define new functions, and you want those
-new functions to "see" the \code{library} attached packages, here are 3 ways to
-do that:
-\enumerate{
-\item Attach all the packages you want before attaching the script:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(foo); library(bar)
-attach_source("my_script.R")
-}\if{html}{\out{</div>}}
-\item Modify the default \code{pos} argument to \code{library}, so all new packages
-attach after your script:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{envir:::set_default_library_pos(after = "source:my_script.R")
-attach_source("my_script.R")
-}\if{html}{\out{</div>}}
-\item This is the likely the most preferred solution. Instead of sourcing
-files directly in the attached environment, source the files into a new
-environment that inherits from \code{.Globalenv}, and then copy over everything
-to the attached environment.
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{attach_eval(\{
-  import_from("my_script.R")
-\})
-}\if{html}{\out{</div>}}
-}
+Source R files into an attached environment
 }
 \seealso{
 \link{import_from}, \link{set_library_default_pos}
