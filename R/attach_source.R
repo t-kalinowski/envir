@@ -54,14 +54,11 @@ attach_source <- function(..., # files_andor_dirs,
     # user is opt-ing out of new.env(parent=globalenv()), want "old-style" attach_source()
     # where the script is literally sys.source()'d in the already attached env
 
-    attached_env <- attach(NULL,
-                           pos = pos,
-                           name = name,
-                           warn.conflicts = FALSE)
+    attached_env <- (attach)(NULL, pos = pos, name = name, warn.conflicts = FALSE)
     include(c(...), envir = attached_env, chdir = chdir, recursive = recursive)
 
   } else {
-    # default under typical usage: create a new.env(), then attach it.
+    # default code path under typical usage: create a new.env(), then attach it.
     # (N.B: attach(env) doesn't actually modify env; it creates a
     # new (attached) env then shallow copies all the bindings)
 
@@ -71,12 +68,12 @@ attach_source <- function(..., # files_andor_dirs,
     envir <- new.env(parent = parent)
     attr(envir, "name") <- name # a visible reminder when printing functions
     include(c(...), envir = envir, chdir = chdir, recursive = recursive)
-    attached_env <- attach(envir, pos = pos, name = name, warn.conflicts = FALSE)
+    attached_env <- (attach)(envir, pos = pos, name = name, warn.conflicts = FALSE)
   }
 
   if (warn.conflicts) {
     if (exists(".conflicts.OK", envir = attached_env, inherits = FALSE)) {
-      .conflicts.OK <- get0(".conflicts.OK", envir = attached_env, inherits = FALSE)
+      .conflicts.OK <- get(".conflicts.OK", envir = attached_env, inherits = FALSE)
       # attach() only checks for exists(".conflicts.OK"), and if TRUE, skips
       # warnings alltogether. We allow for defining .conflicts.OK to a character
       # vector of names to specifically not warn about -- essentially an alias
