@@ -1,3 +1,5 @@
+# envir (development version)
+
 # envir 0.2.2
 
 * Regenerated documentation at request of CRAN for compatibility with HTML5.
