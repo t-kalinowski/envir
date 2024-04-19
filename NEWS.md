@@ -1,7 +1,7 @@
 # envir (development version)
 
 - `attach_source()` now allows the R scripts to contain `library()` calls, and have 
-  functions defined in the script "see" the `library()` calls. Now, R scripts are 
+  functions defined in the script "see" the `library()` calls. R scripts are now
   first sourced into a `new.env(parent = .GlobalEnv)`, and then all symbols are 
   subsequently copied over into a (different) attached environment. You can restore 
   the old behavior, where the scripts are evaluated in an already attached environment,
