@@ -1,4 +1,4 @@
-# envir (development version)
+# envir 0.3.0
 
 - `attach_source()` now allows the R scripts to contain `library()` calls, and have 
   functions defined in the script "see" the `library()` calls. R scripts are now
